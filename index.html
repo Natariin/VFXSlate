@@ -117,11 +117,29 @@
   #app.visible { display: flex; animation: fadeIn 0.3s ease; }
   @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
 
+  /* ========== APP HALVES ========== */
+  /* Top half: header + slate controls */
+  .top-half {
+    flex: 1 1 50%;
+    display: flex; flex-direction: column;
+    min-height: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  /* Bottom half: level indicator */
+  .bottom-half {
+    flex: 1 1 50%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    min-height: 0;
+    padding: 16px 20px;
+    gap: 16px;
+  }
+
   /* ========== HEADER ========== */
   .app-header {
     flex: 0 0 auto;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 18px 20px 10px;
+    display: flex; align-items: center;
+    padding: 16px 20px 10px;
     border-bottom: 1px solid var(--border);
     gap: 12px;
   }
@@ -137,32 +155,51 @@
     font-size: 20px; letter-spacing: 4px;
     color: var(--text); line-height: 1;
   }
-  .header-version {
-    font-size: 9px; color: var(--dim);
-    letter-spacing: 2px; text-transform: uppercase;
-  }
 
-  /* Level pill in header */
+  /* ========== LEVEL PANEL (bottom half) ========== */
+  .level-label {
+    font-size: 9px; color: var(--muted);
+    letter-spacing: 4px; text-transform: uppercase;
+  }
   .level-pill {
-    display: flex; align-items: center; gap: 8px;
-    padding: 6px 12px; border-radius: 20px;
-    background: var(--bg3); border: 1px solid var(--border);
-    min-width: 120px; justify-content: center;
+    display: flex; align-items: center; gap: 16px;
+    padding: 18px 32px; border-radius: 999px;
+    background: var(--bg3); border: 1px solid var(--border2);
+    width: 100%; max-width: 360px; justify-content: center;
   }
   .level-dot {
-    width: 7px; height: 7px; border-radius: 50%;
+    width: 14px; height: 14px; border-radius: 50%;
     background: var(--dim);
     transition: background 0.3s;
     flex: 0 0 auto;
+    box-shadow: 0 0 0 0 transparent;
+    transition: background 0.3s, box-shadow 0.3s;
+  }
+  .level-dot.lit {
+    box-shadow: 0 0 10px 2px currentColor;
   }
   .level-readout {
-    font-size: 11px; font-weight: 500; letter-spacing: 1px;
+    font-family: var(--font-disp);
+    font-size: 38px; letter-spacing: 3px;
     color: var(--muted); font-variant-numeric: tabular-nums;
     transition: color 0.3s;
-    white-space: nowrap;
+    white-space: nowrap; line-height: 1;
+  }
+  .level-bar-wrap {
+    width: 100%; max-width: 360px;
+    height: 4px; border-radius: 2px;
+    background: var(--border);
+    overflow: hidden;
+  }
+  .level-bar {
+    height: 100%; border-radius: 2px;
+    background: var(--dim);
+    width: 50%;
+    transform-origin: center;
+    transition: width 0.15s, background 0.3s;
   }
 
-  /* ========== MAIN CONTENT ========== */
+  /* ========== MAIN CONTENT (top half inner) ========== */
   .main-row {
     flex: 1 1 auto;
     display: flex;
@@ -177,7 +214,7 @@
     flex: 1 1 auto;
     display: flex; flex-direction: column;
     justify-content: center;
-    padding: 24px 24px 20px;
+    padding: 16px 24px 16px;
     gap: 0;
     border-right: 1px solid var(--border);
   }
@@ -186,7 +223,7 @@
     flex: 1;
     display: flex; flex-direction: column;
     justify-content: center;
-    padding: 16px 0;
+    padding: 10px 0;
   }
   .field-block + .field-block {
     border-top: 1px solid var(--border);
@@ -195,7 +232,7 @@
   .fl {
     font-size: 9px; font-weight: 500;
     color: var(--muted); letter-spacing: 4px;
-    text-transform: uppercase; margin-bottom: 4px;
+    text-transform: uppercase; margin-bottom: 2px;
   }
 
   .field {
@@ -203,7 +240,7 @@
     border: none; outline: none;
     padding: 0;
     font-family: var(--font-disp);
-    font-size: 64px; line-height: 1;
+    font-size: 58px; line-height: 1;
     letter-spacing: 2px;
     -webkit-appearance: none;
     min-width: 0; width: 100%;
@@ -216,17 +253,11 @@
   .field:focus { color: var(--text); }
   #take-field:focus { color: var(--gold); }
 
-  .field-hint {
-    font-size: 9px; color: var(--dim);
-    letter-spacing: 1px; margin-top: 4px;
-    min-height: 14px;
-  }
-
   /* ---- Buttons panel ---- */
   .buttons-panel {
     flex: 0 0 148px;
     display: flex; flex-direction: column;
-    padding: 12px 10px;
+    padding: 10px 10px;
     gap: 6px;
     justify-content: center;
   }
@@ -283,56 +314,13 @@
     color: var(--gold); border-color: #f0c04055; background: var(--gold-dim);
   }
 
-  /* Reset button */
-  .btn.reset {
-    color: var(--dim);
-    min-height: 36px; flex: 0 0 36px;
-  }
-  .btn.reset:active { color: var(--red); border-color: #f0505055; background: #f0505011; }
-
-  /* ---- History log ---- */
-  .history-panel {
-    flex: 0 0 auto;
-    display: flex; flex-direction: column;
-    border-top: 1px solid var(--border);
-    max-height: 100px;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-  .history-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 6px 20px 4px;
-  }
-  .history-title {
-    font-size: 8px; color: var(--dim); letter-spacing: 3px; text-transform: uppercase;
-  }
-  .history-clear-btn {
-    background: none; border: none; color: var(--dim); font-family: var(--font-mono);
-    font-size: 8px; letter-spacing: 2px; cursor: pointer; padding: 0;
-    touch-action: manipulation; text-transform: uppercase;
-  }
-  .history-clear-btn:active { color: var(--red); }
-  .history-list {
-    display: flex; flex-direction: column-reverse;
-    padding: 0 20px 8px; gap: 2px;
-  }
-  .history-item {
-    display: flex; align-items: baseline; gap: 10px;
-    font-size: 10px; color: var(--muted); letter-spacing: 1px;
-    animation: slideIn 0.2s ease;
-  }
-  @keyframes slideIn { from { opacity: 0; transform: translateY(-4px) } to { opacity: 1; transform: none } }
-  .history-sl { color: var(--text); font-weight: 500; }
-  .history-tk { color: var(--gold); }
-  .history-time { color: var(--dim); font-size: 9px; margin-left: auto; }
-
   /* ---- Credits ---- */
   .credits {
     flex: 0 0 auto;
     text-align: center;
     font-size: 9px; color: var(--dim);
     letter-spacing: 2px;
-    padding: 5px 0 6px;
+    padding: 4px 0 5px;
     border-top: 1px solid var(--border);
   }
 
@@ -344,16 +332,16 @@
     .fields-panel {
       flex: 1 1 auto;
       border-right: none;
-      padding: 20px 24px 12px;
+      padding: 12px 24px 10px;
     }
-    .field { font-size: 72px; }
+    .field { font-size: 66px; }
     .buttons-panel {
       flex: 0 0 auto;
       border-top: 1px solid var(--border);
       width: 100%;
       flex-direction: row;
       flex-wrap: wrap;
-      padding: 10px 12px;
+      padding: 8px 12px;
       gap: 6px;
       min-height: 0;
     }
@@ -364,17 +352,17 @@
       flex: 0 0 100%;
       display: flex; gap: 6px;
     }
-    .btn { min-height: 56px; }
+    .btn { min-height: 52px; }
     .btn-section-label { display: none; }
-    .reset-group { flex: 0 0 100%; }
-    .history-panel { max-height: 80px; }
+    .bottom-half { padding: 12px 20px; gap: 12px; }
+    .level-readout { font-size: 30px; }
+    .level-pill { padding: 14px 24px; }
   }
 
   /* ========== LANDSCAPE ========== */
   @media (orientation: landscape) {
     .sl-group, .tk-group { display: contents; }
     .cond-group { display: contents; }
-    .reset-group { display: contents; }
   }
 
   /* ========== HAPTIC FLASH ========== */
@@ -433,120 +421,113 @@
 <!-- ==================== APP ==================== -->
 <div id="app">
 
-  <header class="app-header">
-    <div class="header-logo">
-      <div class="header-clap">
-        <svg viewBox="0 0 36 28" xmlns="http://www.w3.org/2000/svg">
-          <rect x="1" y="10" width="34" height="17" rx="3" fill="#e8e4d9"/>
-          <rect x="1" y="3" width="34" height="9" rx="3" fill="#1a1a22"/>
-          <clipPath id="hck"><rect x="1" y="3" width="34" height="9" rx="3"/></clipPath>
-          <g clip-path="url(#hck)">
-            <rect x="1"  y="3" width="6" height="9" fill="#e8e4d9"/>
-            <rect x="11" y="3" width="6" height="9" fill="#e8e4d9"/>
-            <rect x="21" y="3" width="6" height="9" fill="#e8e4d9"/>
-            <rect x="31" y="3" width="6" height="9" fill="#e8e4d9"/>
-            <polygon points="1,3  7,3  1,12"  fill="#1a1a22"/>
-            <polygon points="11,3 17,3 11,12" fill="#1a1a22"/>
-            <polygon points="21,3 27,3 21,12" fill="#1a1a22"/>
-            <polygon points="31,3 37,3 31,12" fill="#1a1a22"/>
-          </g>
-          <text x="18" y="22" font-family="monospace" font-size="8" font-weight="900" fill="#0b0b0d" text-anchor="middle">SL</text>
-        </svg>
+  <!-- ===== TOP HALF: header + slate controls ===== -->
+  <div class="top-half">
+
+    <header class="app-header">
+      <div class="header-logo">
+        <div class="header-clap">
+          <svg viewBox="0 0 36 28" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1" y="10" width="34" height="17" rx="3" fill="#e8e4d9"/>
+            <rect x="1" y="3" width="34" height="9" rx="3" fill="#1a1a22"/>
+            <clipPath id="hck"><rect x="1" y="3" width="34" height="9" rx="3"/></clipPath>
+            <g clip-path="url(#hck)">
+              <rect x="1"  y="3" width="6" height="9" fill="#e8e4d9"/>
+              <rect x="11" y="3" width="6" height="9" fill="#e8e4d9"/>
+              <rect x="21" y="3" width="6" height="9" fill="#e8e4d9"/>
+              <rect x="31" y="3" width="6" height="9" fill="#e8e4d9"/>
+              <polygon points="1,3  7,3  1,12"  fill="#1a1a22"/>
+              <polygon points="11,3 17,3 11,12" fill="#1a1a22"/>
+              <polygon points="21,3 27,3 21,12" fill="#1a1a22"/>
+              <polygon points="31,3 37,3 31,12" fill="#1a1a22"/>
+            </g>
+            <text x="18" y="22" font-family="monospace" font-size="8" font-weight="900" fill="#0b0b0d" text-anchor="middle">SL</text>
+          </svg>
+        </div>
+        <div class="header-title">Pocket Wrangler</div>
       </div>
-      <div>
-        <div class="header-title">VFX Slate</div>
+    </header>
+
+    <div class="main-row">
+
+      <!-- ---- Fields ---- -->
+      <div class="fields-panel">
+
+        <div class="field-block">
+          <div class="fl">Scene / Slate</div>
+          <input class="field" id="slate-field" value="1-1"
+                 inputmode="text" autocapitalize="characters"
+                 autocomplete="off" spellcheck="false" />
+        </div>
+
+        <div class="field-block">
+          <div class="fl">Take</div>
+          <input class="field" id="take-field" value="1"
+                 inputmode="text" autocomplete="off" spellcheck="false" />
+        </div>
+
       </div>
+
+      <!-- ---- Buttons ---- -->
+      <div class="buttons-panel">
+
+        <!-- SL group -->
+        <div class="sl-group">
+          <div class="btn-section-label">Scene</div>
+          <div class="btn-pair">
+            <button class="btn" id="sl-minus">
+              <span class="btn-icon">−</span>
+              <span class="btn-label">SL</span>
+            </button>
+            <button class="btn primary" id="sl-plus">
+              <span class="btn-icon">+</span>
+              <span class="btn-label">SL</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- TK group -->
+        <div class="tk-group">
+          <div class="btn-section-label">Take</div>
+          <div class="btn-pair">
+            <button class="btn" id="tk-minus">
+              <span class="btn-icon">−</span>
+              <span class="btn-label">TK</span>
+            </button>
+            <button class="btn primary" id="tk-plus">
+              <span class="btn-icon">+</span>
+              <span class="btn-label">TK</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Condition presets -->
+        <div class="cond-group">
+          <div class="btn-pair">
+            <button class="btn cond" id="sunny-btn">☀ Sunny</button>
+            <button class="btn cond" id="overcast-btn">☁ Overcast</button>
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
-    <!-- Level pill (top right) -->
+  </div><!-- /top-half -->
+
+  <!-- ===== BOTTOM HALF: level indicator ===== -->
+  <div class="bottom-half">
+    <div class="level-label">Level</div>
     <div class="level-pill" id="level-pill">
       <div class="level-dot" id="level-dot"></div>
       <span class="level-readout" id="level-readout">– –</span>
     </div>
-  </header>
-
-  <div class="main-row">
-
-    <!-- ---- Fields ---- -->
-    <div class="fields-panel">
-
-      <div class="field-block">
-        <div class="fl">Scene / Slate</div>
-        <input class="field" id="slate-field" value="1-1"
-               inputmode="text" autocapitalize="characters"
-               autocomplete="off" spellcheck="false" />
-        <div class="field-hint" id="slate-hint"></div>
-      </div>
-
-      <div class="field-block">
-        <div class="fl">Take</div>
-        <input class="field" id="take-field" value="1"
-               inputmode="text" autocomplete="off" spellcheck="false" />
-        <div class="field-hint" id="take-hint"></div>
-      </div>
-
+    <div class="level-bar-wrap">
+      <div class="level-bar" id="level-bar"></div>
     </div>
+  </div><!-- /bottom-half -->
 
-    <!-- ---- Buttons ---- -->
-    <div class="buttons-panel">
-
-      <!-- SL group -->
-      <div class="sl-group">
-        <div class="btn-section-label">Scene</div>
-        <div class="btn-pair">
-          <button class="btn" id="sl-minus">
-            <span class="btn-icon">−</span>
-            <span class="btn-label">SL</span>
-          </button>
-          <button class="btn primary" id="sl-plus">
-            <span class="btn-icon">+</span>
-            <span class="btn-label">SL</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- TK group -->
-      <div class="tk-group">
-        <div class="btn-section-label">Take</div>
-        <div class="btn-pair">
-          <button class="btn" id="tk-minus">
-            <span class="btn-icon">−</span>
-            <span class="btn-label">TK</span>
-          </button>
-          <button class="btn primary" id="tk-plus">
-            <span class="btn-icon">+</span>
-            <span class="btn-label">TK</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Condition presets -->
-      <div class="cond-group">
-        <div class="btn-pair">
-          <button class="btn cond" id="sunny-btn">☀ Sunny</button>
-          <button class="btn cond" id="overcast-btn">☁ Overcast</button>
-        </div>
-      </div>
-
-      <!-- Reset -->
-      <div class="reset-group">
-        <button class="btn reset" id="reset-tk-btn">↺ Reset TK</button>
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- ---- History ---- -->
-  <div class="history-panel" id="history-panel">
-    <div class="history-header">
-      <span class="history-title">Log</span>
-      <button class="history-clear-btn" id="clear-history-btn">Clear</button>
-    </div>
-    <div class="history-list" id="history-list"></div>
-  </div>
-
-  <div class="credits">vfx slate · pocket wrangler &nbsp;·&nbsp; v0.3 &nbsp;·&nbsp; by nadan</div>
+  <div class="credits">pocket wrangler &nbsp;·&nbsp; v0.3 &nbsp;·&nbsp; by nadan</div>
 
 </div><!-- /app -->
 
@@ -601,9 +582,8 @@ function loadState() {
 function saveState() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      slate:   slateField.value,
-      take:    takeField.value,
-      history: history.slice(0, 30)
+      slate: slateField.value,
+      take:  takeField.value
     }));
   } catch (e) {}
 }
@@ -617,12 +597,9 @@ const startBtn      = document.getElementById('start-btn');
 const app           = document.getElementById('app');
 const slateField    = document.getElementById('slate-field');
 const takeField     = document.getElementById('take-field');
-const slateHint     = document.getElementById('slate-hint');
-const takeHint      = document.getElementById('take-hint');
 const levelDot      = document.getElementById('level-dot');
 const levelReadout  = document.getElementById('level-readout');
-const historyList   = document.getElementById('history-list');
-const clearHistBtn  = document.getElementById('clear-history-btn');
+const levelBar      = document.getElementById('level-bar');
 
 /* =====================================================================
    PERMISSIONS
@@ -664,9 +641,8 @@ startBtn.addEventListener('click', () => {
   requestWakeLock();
   const saved = loadState();
   if (saved) {
-    if (saved.slate)   slateField.value = saved.slate;
-    if (saved.take)    takeField.value  = saved.take;
-    if (saved.history) { history = saved.history; renderHistory(); }
+    if (saved.slate) slateField.value = saved.slate;
+    if (saved.take)  takeField.value  = saved.take;
   }
 });
 
@@ -705,43 +681,18 @@ function renderLevel(tiltX, tiltY) {
               : total < 2   ? 'var(--yellow)'
               :                'var(--red)';
   levelDot.style.background = color;
+  levelDot.style.boxShadow  = `0 0 10px 3px ${total < 0.5 ? '#3ddba0' : total < 2 ? '#f5c842' : '#f05050'}`;
   levelReadout.style.color  = color;
   levelReadout.textContent  =
     (tiltX >= 0 ? '+' : '') + tiltX.toFixed(1) + '°  ' +
     (tiltY >= 0 ? '+' : '') + tiltY.toFixed(1) + '°';
+  // Bar: center = 50%, max shift ±40% at 5°
+  const shift = Math.min(Math.abs(tiltX) / 5, 1) * 40;
+  const barW  = 4 + Math.min(total / 5, 1) * 30; // 4–34%
+  levelBar.style.width      = barW + '%';
+  levelBar.style.marginLeft = (50 - barW / 2 + (tiltX / 5) * 30) + '%';
+  levelBar.style.background = total < 0.5 ? 'var(--green)' : total < 2 ? 'var(--yellow)' : 'var(--red)';
 }
-
-/* =====================================================================
-   HISTORY LOG
-   ===================================================================== */
-let history = [];
-
-function addHistory(sl, tk) {
-  const now = new Date();
-  const time = now.getHours().toString().padStart(2,'0') + ':' +
-               now.getMinutes().toString().padStart(2,'0');
-  history.unshift({ sl, tk, time });
-  if (history.length > 30) history.pop();
-  renderHistory();
-}
-
-function renderHistory() {
-  historyList.innerHTML = '';
-  history.forEach(item => {
-    const el = document.createElement('div');
-    el.className = 'history-item';
-    el.innerHTML = `<span class="history-sl">${item.sl}</span>` +
-                   `<span class="history-tk">TK ${item.tk}</span>` +
-                   `<span class="history-time">${item.time}</span>`;
-    historyList.appendChild(el);
-  });
-}
-
-clearHistBtn.addEventListener('click', () => {
-  history = [];
-  renderHistory();
-  saveState();
-});
 
 /* =====================================================================
    HAPTIC FEEDBACK
@@ -764,10 +715,7 @@ function bumpSlateBtn(direction) {
   let idx = variantToIndex(s.variant) + direction;
   if (idx < 0) idx = 0;
   s.variant = indexToVariant(idx);
-  const newSlate = formatSlate(s);
-  // Log the current before bumping
-  addHistory(slateField.value, takeField.value);
-  slateField.value = newSlate;
+  slateField.value = formatSlate(s);
   if (!isNaN(parseInt(takeField.value.trim(), 10))) takeField.value = '1';
   saveState();
   vibrate(8);
@@ -786,14 +734,6 @@ function bumpTakeBtn(direction) {
   vibrate(6);
 }
 
-function resetTake() {
-  if (takeField.value !== '1') {
-    addHistory(slateField.value, takeField.value);
-  }
-  takeField.value = '1';
-  saveState();
-  vibrate([6, 30, 6]);
-}
 
 const slPlus  = document.getElementById('sl-plus');
 const slMinus = document.getElementById('sl-minus');
@@ -801,7 +741,6 @@ const tkPlus  = document.getElementById('tk-plus');
 const tkMinus = document.getElementById('tk-minus');
 const sunBtn  = document.getElementById('sunny-btn');
 const ovcBtn  = document.getElementById('overcast-btn');
-const rstBtn  = document.getElementById('reset-tk-btn');
 
 slPlus.addEventListener('click',  () => { flashBtn(slPlus);  bumpSlateBtn(1);  });
 slMinus.addEventListener('click', () => { flashBtn(slMinus); bumpSlateBtn(-1); });
@@ -824,18 +763,9 @@ ovcBtn.addEventListener('click', () => {
   saveState(); vibrate(6);
 });
 
-rstBtn.addEventListener('click', () => {
-  flashBtn(rstBtn);
-  sunBtn.classList.remove('active');
-  ovcBtn.classList.remove('active');
-  resetTake();
-});
-
 /* ---- Field validation / formatting ---- */
 slateField.addEventListener('input', () => {
   slateField.value = slateField.value.toUpperCase();
-  const s = parseSlate(slateField.value);
-  slateHint.textContent = s ? '' : 'Format: 1-1, 2-A1, 7-G14B…';
 });
 slateField.addEventListener('blur', () => {
   const s = parseSlate(slateField.value);
@@ -845,7 +775,6 @@ slateField.addEventListener('blur', () => {
   } else {
     slateField.value = formatSlate(s);
   }
-  slateHint.textContent = '';
   saveState();
 });
 takeField.addEventListener('blur', () => {
