@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no, maximum-scale=1" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Slate" />
+<meta name="apple-mobile-web-app-title" content="Pocket Wrangler" />
 <meta name="theme-color" content="#000000" />
-<title>VFX Slate</title>
-<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%23000'/><text x='90' y='115' font-family='monospace' font-size='80' font-weight='bold' fill='%23f5d76e' text-anchor='middle'>SL</text></svg>" />
+<title>Pocket Wrangler</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%23000'/><text x='90' y='110' font-family='monospace' font-size='54' font-weight='bold' fill='%23f5d76e' text-anchor='middle'>PW</text></svg>" />
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body {
@@ -37,7 +37,7 @@
     gap: 12px; z-index: 100; padding: 32px;
   }
   #overlay h1 {
-    margin: 0 0 8px;
+    margin: 0 0 4px;
     font-size: 13px; font-weight: 400;
     color: #f5d76e; letter-spacing: 6px;
   }
@@ -61,11 +61,23 @@
   }
   #start-btn:disabled { opacity: 0.15; pointer-events: none; }
 
-  /* ---- App ---- */
+  /* ---- App shell ---- */
   #app { display: none; flex: 1; flex-direction: column; height: 100%; }
   #app.visible { display: flex; }
 
-  /* ===================== SHARED ===================== */
+  /* ---- App header ---- */
+  .app-header {
+    flex: 0 0 auto;
+    display: flex; align-items: center; justify-content: center;
+    padding: 10px 20px 6px;
+  }
+  .app-title {
+    font-size: 11px; font-weight: 400;
+    color: #f5d76e; letter-spacing: 5px;
+    text-transform: uppercase;
+  }
+
+  /* ---- Shared field styles ---- */
   .field {
     background: transparent; color: #fff;
     border: none;
@@ -74,17 +86,18 @@
     font-family: inherit; font-size: 40px; font-weight: 400;
     letter-spacing: 2px;
     outline: none; -webkit-appearance: none;
-    min-width: 0;
+    min-width: 0; width: 100%;
     -webkit-user-select: text; user-select: text;
   }
   .field:focus { border-bottom-color: #444; }
-  #take-field { color: #f5d76e; font-size: 32px; letter-spacing: 1px; }
+  #take-field { color: #f5d76e; font-size: 30px; letter-spacing: 1px; }
 
+  /* ---- Shared button styles ---- */
   .btn {
     flex: 1;
     background: transparent; color: #888;
     border: 1px solid #2e2e2e; border-radius: 4px;
-    height: 48px; padding: 0;
+    height: 44px; padding: 0;
     font-family: inherit; font-size: 10px; font-weight: 500;
     letter-spacing: 1.5px; cursor: pointer;
     touch-action: manipulation;
@@ -94,17 +107,16 @@
   .btn:active { color: #fff; border-color: #555; background: #0f0f0f; }
   .btn.cond { font-size: 9px; letter-spacing: 0.5px; color: #666; }
   .btn.cond:active { color: #f5d76e; }
-
   .btn-pair { display: flex; gap: 7px; }
 
+  /* ---- Tilt values ---- */
   .tilt-val {
-    font-size: 54px; font-weight: 200;
-    letter-spacing: -2px;
-    color: #252525;
+    font-size: 40px; font-weight: 200;
+    letter-spacing: -1px;
+    color: #2a2a2a;
     transition: color 0.25s;
     font-variant-numeric: tabular-nums;
-    line-height: 1.05;
-    text-align: center;
+    line-height: 1;
   }
 
   /* ===================== LANDSCAPE (default) ===================== */
@@ -113,8 +125,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 16px 20px;
-    gap: 16px;
+    padding: 8px 20px;
+    gap: 20px;
     min-height: 0;
     overflow: hidden;
   }
@@ -122,24 +134,42 @@
   .fields-panel {
     flex: 1 1 auto;
     display: flex; flex-direction: column;
-    justify-content: center; gap: 14px;
-    min-width: 0; max-width: 230px;
+    justify-content: center; gap: 12px;
+    min-width: 0;
   }
   .field-row {
     display: flex; align-items: baseline; gap: 12px;
   }
-
-  .tilt-panel {
-    flex: 0 0 auto;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 0; padding: 0 8px;
+  .fl {
+    font-size: 9px; color: #777;
+    letter-spacing: 2px; flex: 0 0 22px;
   }
 
   .buttons-panel {
-    flex: 0 0 120px;
+    flex: 0 0 130px;
     display: flex; flex-direction: column;
-    gap: 7px;
+    gap: 6px;
+  }
+
+  /* ---- Tilt bar (always at bottom, above credits) ---- */
+  .tilt-bar {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    padding: 8px 20px 10px;
+    border-top: 1px solid #111;
+  }
+
+  /* ---- Credits ---- */
+  .credits {
+    flex: 0 0 auto;
+    text-align: center;
+    font-size: 11px; color: #999;
+    letter-spacing: 2px;
+    padding: 4px 0 8px;
   }
 
   /* ===================== PORTRAIT ===================== */
@@ -148,33 +178,12 @@
       flex-direction: column;
       align-items: stretch;
       justify-content: center;
-      padding: 28px 24px 12px;
-      gap: 28px;
+      padding: 12px 24px 8px;
+      gap: 22px;
     }
-    .fields-panel {
-      max-width: none;
-      gap: 18px;
-    }
-    .tilt-panel {
-      flex-direction: row;
-      justify-content: center;
-      gap: 28px;
-      padding: 0;
-    }
-    .tilt-val { font-size: 48px; }
-    .buttons-panel {
-      flex: 0 0 auto;
-      width: auto;
-    }
-  }
-
-  /* ---- Credits ---- */
-  .credits {
-    flex: 0 0 auto;
-    text-align: center;
-    font-size: 8px; color: #191919;
-    letter-spacing: 4px;
-    padding: 2px 0 6px;
+    .fields-panel { gap: 16px; }
+    .buttons-panel { flex: 0 0 auto; width: auto; }
+    .tilt-val { font-size: 46px; }
   }
 </style>
 </head>
@@ -182,7 +191,7 @@
 
 <!-- OVERLAY -->
 <div id="overlay">
-  <h1>VFX SLATE</h1>
+  <h1>POCKET WRANGLER</h1>
   <p>Motion access is needed for the level indicator. Nothing leaves your device.</p>
   <button class="perm-btn" id="motion-btn">Enable level</button>
   <button class="perm-btn" id="start-btn" disabled>Start →</button>
@@ -190,6 +199,11 @@
 
 <!-- APP -->
 <div id="app">
+
+  <header class="app-header">
+    <span class="app-title">Pocket Wrangler</span>
+  </header>
+
   <div class="main-row">
 
     <!-- Fields -->
@@ -205,12 +219,6 @@
         <input class="field" id="take-field" value="1"
                inputmode="text" autocomplete="off" spellcheck="false" />
       </div>
-    </div>
-
-    <!-- Tilt readout -->
-    <div class="tilt-panel">
-      <div class="tilt-val" id="tilt-x">—</div>
-      <div class="tilt-val" id="tilt-y">—</div>
     </div>
 
     <!-- Buttons -->
@@ -231,7 +239,14 @@
 
   </div>
 
-  <div class="credits">made by nadan</div>
+  <!-- Level display -->
+  <div class="tilt-bar">
+    <span class="tilt-val" id="tilt-x">—</span>
+    <span class="tilt-val" id="tilt-y">—</span>
+  </div>
+
+  <div class="credits">made by nadan &nbsp;·&nbsp; v0.2</div>
+
 </div>
 
 <script>
@@ -326,7 +341,6 @@ motionBtn.addEventListener('click', async () => {
         motionBtn.textContent = 'Denied — tap to retry';
       }
     } else {
-      // Android / desktop — no prompt needed
       attachOrientation();
       motionGranted = true;
       motionBtn.classList.add('granted');
@@ -352,8 +366,6 @@ startBtn.addEventListener('click', () => {
 /* ============================================================
    ORIENTATION → TILT DISPLAY
    ============================================================ */
-
-// Exponential moving average — lower = smoother but slower to respond
 const TILT_ALPHA = 0.12;
 let smoothX = 0, smoothY = 0, tiltReady = false;
 
@@ -362,16 +374,20 @@ function attachOrientation() {
 }
 
 function onOrientation(e) {
-  // Portrait-only: gamma = left-right, beta = front-back
-  // Invert so values read near-zero when the phone is held level
-  const rawX = -(e.gamma || 0);
-  const rawY = -(e.beta  || 0);
+  const angle  = (screen.orientation && screen.orientation.angle) || window.orientation || 0;
+  const rad    = (angle * Math.PI) / 180;
+  const cos    = Math.cos(rad);
+  const sin    = Math.sin(rad);
+  const rawX   = -(e.gamma || 0);
+  const rawY   = -(e.beta  || 0);
+  const inputX = rawX * cos + rawY * sin;
+  const inputY = -rawX * sin + rawY * cos;
 
   if (!tiltReady) {
-    smoothX = rawX; smoothY = rawY; tiltReady = true;
+    smoothX = inputX; smoothY = inputY; tiltReady = true;
   } else {
-    smoothX += TILT_ALPHA * (rawX - smoothX);
-    smoothY += TILT_ALPHA * (rawY - smoothY);
+    smoothX += TILT_ALPHA * (inputX - smoothX);
+    smoothY += TILT_ALPHA * (inputY - smoothY);
   }
 
   renderTilt(smoothX, smoothY);
@@ -407,7 +423,6 @@ function bumpTakeBtn(direction) {
   const val = takeField.value.trim();
   let n = parseInt(val, 10);
   if (isNaN(n)) {
-    // Coming from a text condition (Sunny / Overcast) — restart at 1
     n = 1;
   } else {
     n = Math.max(1, n + direction);
@@ -416,11 +431,10 @@ function bumpTakeBtn(direction) {
   saveState();
 }
 
-document.getElementById('sl-plus').addEventListener('click',     () => bumpSlateBtn(1));
-document.getElementById('sl-minus').addEventListener('click',    () => bumpSlateBtn(-1));
-document.getElementById('tk-plus').addEventListener('click',     () => bumpTakeBtn(1));
-document.getElementById('tk-minus').addEventListener('click',    () => bumpTakeBtn(-1));
-
+document.getElementById('sl-plus').addEventListener('click',      () => bumpSlateBtn(1));
+document.getElementById('sl-minus').addEventListener('click',     () => bumpSlateBtn(-1));
+document.getElementById('tk-plus').addEventListener('click',      () => bumpTakeBtn(1));
+document.getElementById('tk-minus').addEventListener('click',     () => bumpTakeBtn(-1));
 document.getElementById('sunny-btn').addEventListener('click',    () => { takeField.value = 'Sunny';    saveState(); });
 document.getElementById('overcast-btn').addEventListener('click', () => { takeField.value = 'Overcast'; saveState(); });
 
@@ -440,7 +454,7 @@ slateField.addEventListener('blur', () => {
 
 takeField.addEventListener('blur', () => {
   const val = takeField.value.trim();
-  if (val === 'Sunny' || val === 'Overcast') return; // keep text conditions
+  if (val === 'Sunny' || val === 'Overcast') return;
   let n = parseInt(val, 10);
   if (isNaN(n) || n < 1) n = 1;
   takeField.value = String(n);
