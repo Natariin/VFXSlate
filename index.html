@@ -69,7 +69,7 @@
   .field {
     background: transparent; color: #fff;
     border: none;
-    border-bottom: 1px solid #1c1c1c;
+    border-bottom: 1px solid #2a2a2a;
     padding: 2px 0 5px;
     font-family: inherit; font-size: 40px; font-weight: 400;
     letter-spacing: 2px;
@@ -77,13 +77,13 @@
     min-width: 0;
     -webkit-user-select: text; user-select: text;
   }
-  .field:focus { border-bottom-color: #333; }
+  .field:focus { border-bottom-color: #444; }
   #take-field { color: #f5d76e; font-size: 32px; letter-spacing: 1px; }
 
   .btn {
     flex: 1;
-    background: transparent; color: #3e3e3e;
-    border: 1px solid #171717; border-radius: 4px;
+    background: transparent; color: #888;
+    border: 1px solid #2e2e2e; border-radius: 4px;
     height: 48px; padding: 0;
     font-family: inherit; font-size: 10px; font-weight: 500;
     letter-spacing: 1.5px; cursor: pointer;
@@ -91,8 +91,8 @@
     -webkit-user-select: none; user-select: none;
     display: flex; align-items: center; justify-content: center;
   }
-  .btn:active { color: #ccc; border-color: #2a2a2a; background: #0a0a0a; }
-  .btn.cond { font-size: 9px; letter-spacing: 0.5px; color: #333; }
+  .btn:active { color: #fff; border-color: #555; background: #0f0f0f; }
+  .btn.cond { font-size: 9px; letter-spacing: 0.5px; color: #666; }
   .btn.cond:active { color: #f5d76e; }
 
   .btn-pair { display: flex; gap: 7px; }
@@ -107,70 +107,36 @@
     text-align: center;
   }
 
-  /* ===================== LANDSCAPE ===================== */
+  /* ===================== LAYOUT (portrait) ===================== */
   .main-row {
     flex: 1 1 auto;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 16px 20px;
-    gap: 16px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    padding: 28px 24px 12px;
+    gap: 28px;
     min-height: 0;
     overflow: hidden;
   }
 
   .fields-panel {
-    flex: 1 1 auto;
     display: flex; flex-direction: column;
-    justify-content: center; gap: 14px;
-    min-width: 0; max-width: 230px;
+    gap: 18px;
   }
   .field-row {
     display: flex; align-items: baseline; gap: 12px;
   }
-  .fl {
-    font-size: 9px; color: #333;
-    letter-spacing: 2px; flex: 0 0 auto;
-  }
 
   .tilt-panel {
-    flex: 0 0 auto;
-    display: flex; flex-direction: column;
+    display: flex; flex-direction: row;
     align-items: center; justify-content: center;
-    gap: 0;
-    padding: 0 8px;
+    gap: 28px;
   }
 
   .buttons-panel {
-    flex: 0 0 120px;
     display: flex; flex-direction: column;
     gap: 7px;
-  }
-
-  /* ===================== PORTRAIT ===================== */
-  @media (orientation: portrait) {
-    .main-row {
-      flex-direction: column;
-      align-items: stretch;
-      justify-content: center;
-      padding: 28px 24px 12px;
-      gap: 28px;
-    }
-    .fields-panel {
-      max-width: none;
-      gap: 18px;
-    }
-    .tilt-panel {
-      flex-direction: row;
-      justify-content: center;
-      gap: 28px;
-      padding: 0;
-    }
-    .tilt-val { font-size: 48px; }
-    .buttons-panel {
-      flex: 0 0 auto;
-      width: auto;
-    }
   }
 
   /* ---- Credits ---- */
@@ -347,7 +313,7 @@ startBtn.addEventListener('click', () => {
   overlay.style.display = 'none';
   app.classList.add('visible');
   requestWakeLock();
-  try { screen.orientation.lock('landscape').catch(() => {}); } catch(e) {}
+  try { screen.orientation.lock('portrait').catch(() => {}); } catch(e) {}
   const saved = loadState();
   if (saved) {
     if (saved.slate) slateField.value = saved.slate;
@@ -358,28 +324,29 @@ startBtn.addEventListener('click', () => {
 /* ============================================================
    ORIENTATION → TILT DISPLAY
    ============================================================ */
+
+// Exponential moving average — lower = smoother but slower to respond
+const TILT_ALPHA = 0.12;
+let smoothX = 0, smoothY = 0, tiltReady = false;
+
 function attachOrientation() {
   window.addEventListener('deviceorientation', onOrientation, true);
 }
 
 function onOrientation(e) {
-  const gamma = e.gamma || 0; // left-right
-  const beta  = e.beta  || 0; // front-back
+  // Portrait-only: gamma = left-right, beta = front-back
+  // Invert so values read near-zero when the phone is held level
+  const rawX = -(e.gamma || 0);
+  const rawY = -(e.beta  || 0);
 
-  // Rotate raw axes to match current screen orientation
-  const angle = (screen.orientation && screen.orientation.angle) || window.orientation || 0;
-  const rad   = (angle * Math.PI) / 180;
-  const cos   = Math.cos(rad);
-  const sin   = Math.sin(rad);
+  if (!tiltReady) {
+    smoothX = rawX; smoothY = rawY; tiltReady = true;
+  } else {
+    smoothX += TILT_ALPHA * (rawX - smoothX);
+    smoothY += TILT_ALPHA * (rawY - smoothY);
+  }
 
-  // Invert so values read near-zero when level
-  const rawX = -gamma;
-  const rawY = -beta;
-
-  const tiltX = rawX * cos + rawY * sin;
-  const tiltY = -rawX * sin + rawY * cos;
-
-  renderTilt(tiltX, tiltY);
+  renderTilt(smoothX, smoothY);
 }
 
 function renderTilt(tiltX, tiltY) {
