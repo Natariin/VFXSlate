@@ -61,149 +61,218 @@
     margin-top: 8px; font-weight: 700;
   }
   #start-btn:disabled { opacity: 0.3; }
-  .orient-hint {
-    font-size: 11px; color: #555; margin-top: 8px;
-  }
 
   /* ---- Main app ---- */
   #app { display: none; flex: 1; flex-direction: column; width: 100%; height: 100%; }
   #app.visible { display: flex; }
 
-  /* Top: slate bar */
-  .slate-bar {
-    display: flex; align-items: center; gap: 4px;
-    padding: 8px 10px;
-    border-bottom: 1px solid #1a1a1a;
-    flex: 0 0 auto;
+  /* 3-column main row */
+  .main-row {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 12px;
+    gap: 12px;
+    min-height: 0;
+    overflow: hidden;
   }
+
+  /* Left panel: slate + take fields */
+  .fields-panel {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    min-width: 150px;
+    max-width: 210px;
+  }
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .field-label {
+    font-size: 9px; color: #555;
+    letter-spacing: 2px; padding-left: 4px;
+  }
+  .field {
+    background: #0a0a0a; color: #fff;
+    border: 1px solid #2a2a2a; border-radius: 8px;
+    height: 68px; padding: 0 10px;
+    font-family: inherit; font-size: 38px; font-weight: 600;
+    letter-spacing: 3px; text-align: center;
+    outline: none; -webkit-appearance: none;
+    width: 100%;
+  }
+  .field:focus { border-color: #f5d76e; }
+  #take-field { color: #f5d76e; }
+
+  /* Center panel: circular bubble level */
+  .level-panel {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 0;
+    min-height: 0;
+  }
+  .bubble-vial {
+    position: relative;
+    width: min(210px, calc(100dvh - 140px));
+    height: min(210px, calc(100dvh - 140px));
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 32%, #1c1c1c 0%, #060606 65%);
+    border: 2px solid #252525;
+    overflow: hidden;
+    box-shadow:
+      inset 0 2px 14px rgba(0,0,0,0.95),
+      inset 0 0 0 1px rgba(255,255,255,0.03),
+      0 0 24px rgba(0,0,0,0.6);
+  }
+  /* Inner ring texture */
+  .bubble-vial::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    border: 1px solid #161616;
+    pointer-events: none;
+  }
+  /* Faint crosshair lines */
+  .bubble-line-h, .bubble-line-v {
+    position: absolute;
+    background: #1e3326;
+    pointer-events: none;
+  }
+  .bubble-line-h {
+    width: 58%; height: 1px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .bubble-line-v {
+    width: 1px; height: 58%;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  /* Target ring (the "level zone") */
+  .bubble-target-ring {
+    position: absolute;
+    width: 27%; height: 27%;
+    border: 1px dashed #2a8a4a;
+    border-radius: 50%;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  /* The bubble ball */
+  #bubble {
+    position: absolute;
+    width: 23%; height: 23%;
+    border-radius: 50%;
+    background: #f5d76e;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    transition: top 0.08s ease-out, left 0.08s ease-out, background 0.15s;
+    box-shadow:
+      0 0 10px rgba(245,215,110,0.55),
+      inset 0 1px 4px rgba(255,255,255,0.35),
+      inset 0 -1px 3px rgba(0,0,0,0.4);
+  }
+  .tilt-readout {
+    font-size: 10px; color: #3a3a3a;
+    letter-spacing: 1px;
+  }
+
+  /* Right panel: buttons */
+  .buttons-panel {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    gap: 7px;
+    min-width: 58px;
+    width: 62px;
+  }
+  .btn-divider { height: 8px; }
   .btn {
-    background: #1a1a1a; color: #fff;
-    border: 1px solid #333; border-radius: 6px;
-    height: 44px; min-width: 48px; padding: 0 10px;
-    font-family: inherit; font-size: 13px; font-weight: 500;
+    background: #111; color: #ddd;
+    border: 1px solid #252525; border-radius: 8px;
+    height: 52px; padding: 0 6px;
+    font-family: inherit; font-size: 12px; font-weight: 600;
     letter-spacing: 0.5px; cursor: pointer;
     touch-action: manipulation;
     display: flex; align-items: center; justify-content: center;
+    -webkit-user-select: none; user-select: none;
   }
-  .btn:active { background: #2a2a2a; transform: scale(0.96); }
-  .field {
-    background: #000; color: #fff;
-    border: 1px solid #333; border-radius: 6px;
-    height: 44px; padding: 0 8px;
-    font-family: inherit; font-size: 22px; font-weight: 500;
-    letter-spacing: 2px; text-align: center;
-    outline: none; -webkit-appearance: none;
-  }
-  .field:focus { border-color: #f5d76e; }
-  #slate-field { flex: 1; min-width: 0; }
-  #take-field { width: 56px; color: #f5d76e; font-size: 22px; }
-  .take-group { display: flex; align-items: center; gap: 2px; }
-  .take-group .t-label {
-    font-size: 11px; color: #666; padding: 0 2px;
-  }
-  .spacer { width: 6px; flex: 0 0 auto; }
-
-  /* Middle: bubble level */
-  .level-row {
-    flex: 1 1 auto;
-    position: relative;
-    display: flex; align-items: center; justify-content: center;
-    padding: 0 20px;
-    min-height: 60px;
-  }
-  .level-track {
-    position: relative;
-    width: 100%; max-width: 600px;
-    height: 28px;
-    background: #0a0a0a;
-    border: 1px solid #222;
-    border-radius: 14px;
-  }
-  .level-center-line {
-    position: absolute; left: 50%; top: -6px;
-    width: 1px; height: 40px;
-    background: #2a8a4a;
-    transform: translateX(-50%);
-  }
-  .level-center-box {
-    position: absolute; left: calc(50% - 16px); top: 4px;
-    width: 32px; height: 20px;
-    border: 1px dashed #2a8a4a;
-    border-radius: 10px;
-    opacity: 0.5;
-  }
-  #bubble {
-    position: absolute; left: 50%; top: 4px;
-    width: 20px; height: 20px;
-    background: #f5d76e;
-    border-radius: 50%;
-    transform: translateX(-50%);
-    transition: left 0.08s ease-out, background 0.15s;
-    box-shadow: 0 0 4px rgba(245,215,110,0.4);
-  }
-  .level-label, .tilt-readout {
-    position: absolute; top: 4px;
-    font-size: 10px; color: #555;
+  .btn:active { background: #222; transform: scale(0.95); }
+  #calibrate-btn {
+    font-size: 10px; color: #444;
+    background: #080808; border-color: #1a1a1a;
+    height: 38px;
+    margin-top: 2px;
     letter-spacing: 1px;
   }
-  .level-label { left: 2px; }
-  .tilt-readout { right: 2px; }
+  #calibrate-btn:active { color: #f5d76e; background: #0f0f0f; }
 
-  /* Bottom: exposure */
+  /* Exposure row */
   .exposure-row {
     flex: 0 0 auto;
-    padding: 6px 10px 8px;
-    border-top: 1px solid #1a1a1a;
+    padding: 5px 12px 5px;
+    border-top: 1px solid #111;
   }
   .exp-line {
     display: flex; align-items: center; gap: 8px;
   }
-  .exp-label { font-size: 10px; color: #666; letter-spacing: 1px; }
+  .exp-label { font-size: 9px; color: #555; letter-spacing: 1px; }
   .exp-bar {
-    flex: 1; height: 16px;
+    flex: 1; height: 14px;
     background: linear-gradient(to right,
       #1a1a3a 0%, #1a1a1a 25%, #1a3a1a 45%,
       #2a6a2a 50%, #1a3a1a 55%, #1a1a1a 75%, #3a1a1a 100%);
-    border: 1px solid #222;
-    border-radius: 8px;
+    border: 1px solid #1e1e1e;
+    border-radius: 7px;
     position: relative;
   }
   .exp-center {
     position: absolute; left: 50%; top: -3px;
-    width: 1px; height: 22px;
-    background: #555;
+    width: 1px; height: 20px;
+    background: #3a3a3a;
     transform: translateX(-50%);
   }
   #exp-needle {
     position: absolute; left: 50%; top: -4px;
-    width: 2px; height: 24px;
+    width: 2px; height: 22px;
     background: #fff;
     transform: translateX(-50%);
     transition: left 0.15s ease-out;
     box-shadow: 0 0 3px rgba(255,255,255,0.7);
   }
   #exp-readout {
-    font-size: 12px; color: #f5d76e;
-    min-width: 64px; text-align: right;
+    font-size: 11px; color: #f5d76e;
+    min-width: 60px; text-align: right;
     letter-spacing: 0.5px;
   }
   .exp-scale {
     display: flex; justify-content: space-between;
-    font-size: 8px; color: #444;
-    padding: 2px 30px 0;
+    font-size: 7px; color: #2e2e2e;
+    padding: 1px 28px 0;
   }
 
-  /* Hidden video for camera capture */
+  /* Credits */
+  .credits {
+    text-align: center;
+    font-size: 8px; color: #222;
+    letter-spacing: 3px;
+    padding: 2px 0 4px;
+  }
+
   #cam-video { display: none; }
-
-  /* Calibrate button (small, corner) */
-  #calibrate {
-    position: absolute; bottom: 4px; right: 8px;
-    font-size: 9px; color: #444; background: none;
-    border: none; padding: 4px 6px; cursor: pointer;
-    letter-spacing: 0.5px;
-  }
-  #calibrate:active { color: #f5d76e; }
 </style>
 </head>
 <body>
@@ -217,36 +286,49 @@
   <button class="perm-btn" id="camera-btn">Enable meter (camera)</button>
 
   <button class="perm-btn" id="start-btn" disabled>Start →</button>
-
-  <div class="orient-hint">Rotate phone to landscape after starting</div>
 </div>
 
 <!-- ============ MAIN APP ============ -->
 <div id="app">
 
-  <div class="slate-bar">
-    <button class="btn" id="sl-minus" aria-label="Previous slate">SL−</button>
-    <input class="field" id="slate-field" value="1-1" inputmode="text" autocapitalize="characters" autocomplete="off" spellcheck="false" />
-    <button class="btn" id="sl-plus" aria-label="Next slate">SL+</button>
-    <div class="spacer"></div>
-    <button class="btn" id="tk-minus" aria-label="Previous take">TK−</button>
-    <div class="take-group">
-      <span class="t-label">T</span>
-      <input class="field" id="take-field" value="1" inputmode="numeric" autocomplete="off" />
+  <div class="main-row">
+
+    <!-- Left: slate + take fields -->
+    <div class="fields-panel">
+      <div class="field-group">
+        <span class="field-label">SLATE</span>
+        <input class="field" id="slate-field" value="1-1" inputmode="text" autocapitalize="characters" autocomplete="off" spellcheck="false" />
+      </div>
+      <div class="field-group">
+        <span class="field-label">TAKE</span>
+        <input class="field" id="take-field" value="1" inputmode="numeric" autocomplete="off" />
+      </div>
     </div>
-    <button class="btn" id="tk-plus" aria-label="Next take">TK+</button>
+
+    <!-- Center: circular 2D bubble level -->
+    <div class="level-panel">
+      <div class="bubble-vial">
+        <div class="bubble-line-h"></div>
+        <div class="bubble-line-v"></div>
+        <div class="bubble-target-ring"></div>
+        <div id="bubble"></div>
+      </div>
+      <div class="tilt-readout" id="tilt-readout">—</div>
+    </div>
+
+    <!-- Right: buttons -->
+    <div class="buttons-panel">
+      <button class="btn" id="sl-plus" aria-label="Next slate">SL+</button>
+      <button class="btn" id="sl-minus" aria-label="Previous slate">SL−</button>
+      <div class="btn-divider"></div>
+      <button class="btn" id="tk-plus" aria-label="Next take">TK+</button>
+      <button class="btn" id="tk-minus" aria-label="Previous take">TK−</button>
+      <button class="btn" id="calibrate-btn" title="Set current light as 0 EV reference">CAL</button>
+    </div>
+
   </div>
 
-  <div class="level-row">
-    <span class="level-label">LEVEL</span>
-    <div class="level-track">
-      <div class="level-center-line"></div>
-      <div class="level-center-box"></div>
-      <div id="bubble"></div>
-    </div>
-    <span class="tilt-readout" id="tilt-readout">—</span>
-  </div>
-
+  <!-- Exposure meter -->
   <div class="exposure-row">
     <div class="exp-line">
       <span class="exp-label">EXP</span>
@@ -259,8 +341,9 @@
     <div class="exp-scale">
       <span>−3</span><span>−2</span><span>−1</span><span>0</span><span>+1</span><span>+2</span><span>+3</span>
     </div>
-    <button id="calibrate" title="Set current light as 0 EV reference">CAL</button>
   </div>
+
+  <div class="credits">made by nadan</div>
 
   <video id="cam-video" autoplay playsinline muted></video>
 </div>
@@ -286,7 +369,7 @@ function variantToIndex(v) {
   let n = 0;
   for (let i = 0; i < v.length; i++) {
     const pos = SLATE_LETTERS.indexOf(v[i]);
-    if (pos < 0) return 0; // I, O, or junk
+    if (pos < 0) return 0;
     n = n * BASE + (pos + 1);
   }
   return n;
@@ -327,30 +410,29 @@ function saveState() {
 /* ============================================================
    DOM REFS
    ============================================================ */
-const overlay = document.getElementById('overlay');
-const motionBtn = document.getElementById('motion-btn');
-const cameraBtn = document.getElementById('camera-btn');
-const startBtn = document.getElementById('start-btn');
-const app = document.getElementById('app');
+const overlay     = document.getElementById('overlay');
+const motionBtn   = document.getElementById('motion-btn');
+const cameraBtn   = document.getElementById('camera-btn');
+const startBtn    = document.getElementById('start-btn');
+const app         = document.getElementById('app');
 
-const slateField = document.getElementById('slate-field');
-const takeField = document.getElementById('take-field');
-const bubble = document.getElementById('bubble');
-const tiltReadout = document.getElementById('tilt-readout');
-const expNeedle = document.getElementById('exp-needle');
-const expReadout = document.getElementById('exp-readout');
-const calibrateBtn = document.getElementById('calibrate');
-const camVideo = document.getElementById('cam-video');
+const slateField    = document.getElementById('slate-field');
+const takeField     = document.getElementById('take-field');
+const bubble        = document.getElementById('bubble');
+const tiltReadout   = document.getElementById('tilt-readout');
+const expNeedle     = document.getElementById('exp-needle');
+const expReadout    = document.getElementById('exp-readout');
+const calibrateBtn  = document.getElementById('calibrate-btn');
+const camVideo      = document.getElementById('cam-video');
 
 /* ============================================================
    PERMISSION FLOWS
    ============================================================ */
 let motionGranted = false;
 let cameraGranted = false;
-let cameraStream = null;
+let cameraStream  = null;
 
 function updateStartBtn() {
-  // Allow start as long as at least one is granted; both is ideal
   startBtn.disabled = !(motionGranted || cameraGranted);
   startBtn.textContent = (motionGranted && cameraGranted) ? 'Start →' : 'Start anyway →';
 }
@@ -369,7 +451,6 @@ motionBtn.addEventListener('click', async () => {
         motionBtn.textContent = 'Motion denied — tap to retry';
       }
     } else {
-      // Android / desktop — just attach
       attachOrientation();
       motionGranted = true;
       motionBtn.classList.add('granted');
@@ -407,72 +488,90 @@ startBtn.addEventListener('click', () => {
   overlay.style.display = 'none';
   app.classList.add('visible');
   requestWakeLock();
-  // Restore persisted state if any
+  // Try to lock landscape orientation
+  try { screen.orientation.lock('landscape').catch(() => {}); } catch(e) {}
   const saved = loadState();
   if (saved) {
     if (saved.slate) slateField.value = saved.slate;
-    if (saved.take) takeField.value = saved.take;
+    if (saved.take)  takeField.value  = saved.take;
     if (typeof saved.expRef === 'number') expRefLuma = saved.expRef;
   }
 });
 
 /* ============================================================
-   ORIENTATION → BUBBLE LEVEL
+   ORIENTATION → 2D BUBBLE LEVEL
    ============================================================ */
-let lastTilt = 0;
-
 function attachOrientation() {
   window.addEventListener('deviceorientation', onOrientation, true);
 }
 
 function onOrientation(e) {
-  // In locked-landscape, the relevant roll axis depends on which side is up.
-  // screen.orientation.angle: 0 portrait, 90 landscape-left, -90/270 landscape-right
+  // gamma: left-right tilt (-90..90), beta: front-back tilt (-180..180)
+  // Bubble moves away from the low side (inverted from tilt direction)
+  const gamma = e.gamma || 0;
+  const beta  = e.beta  || 0;
+
+  // Rotate axes to match current screen orientation
   const angle = (screen.orientation && screen.orientation.angle) || window.orientation || 0;
+  const rad = (angle * Math.PI) / 180;
+  const cos = Math.cos(rad);
+  const sin = Math.sin(rad);
 
-  let tilt;
-  // beta: front-back tilt (-180..180), gamma: left-right tilt (-90..90)
-  if (angle === 90 || angle === -90 || angle === 270) {
-    // Landscape — the "horizon roll" we want is beta
-    tilt = e.beta || 0;
-    // In landscape-right (angle -90 / 270), beta goes the wrong direction
-    if (angle === -90 || angle === 270) tilt = -tilt;
-    // Subtract 90 because beta=90 means phone is upright; in landscape level=0 means beta near 0... actually
-    // After much experimentation: in landscape, beta directly reports the roll across the long axis.
-    // We want 0 when phone is flat on its long edge. Keep raw.
-  } else {
-    // Portrait fallback — use gamma
-    tilt = e.gamma || 0;
-  }
+  // Raw tilt (inverted so bubble opposes gravity)
+  const rawX = -gamma;
+  const rawY = -beta;
 
-  lastTilt = tilt;
-  renderBubble(tilt);
+  const tiltX = rawX * cos + rawY * sin;
+  const tiltY = -rawX * sin + rawY * cos;
+
+  renderBubble(tiltX, tiltY);
 }
 
-function renderBubble(tilt) {
-  // ±15° maps to ±45% from center (5%..95%)
-  const clamped = Math.max(-15, Math.min(15, tilt));
-  const pct = 50 + (clamped / 15) * 45;
-  bubble.style.left = pct + '%';
+function renderBubble(tiltX, tiltY) {
+  const MAX_DEG  = 15;
+  const MAX_MOVE = 35; // % from center, keeps bubble inside vial
 
-  const abs = Math.abs(tilt);
-  bubble.style.background = abs < 0.5 ? '#2ade7a' : abs < 2 ? '#f5d76e' : '#e85a3a';
-  bubble.style.boxShadow = '0 0 6px ' + (abs < 0.5 ? 'rgba(42,222,122,0.5)' : abs < 2 ? 'rgba(245,215,110,0.4)' : 'rgba(232,90,58,0.4)');
+  let pctX = Math.max(-MAX_DEG, Math.min(MAX_DEG, tiltX)) / MAX_DEG * MAX_MOVE;
+  let pctY = Math.max(-MAX_DEG, Math.min(MAX_DEG, tiltY)) / MAX_DEG * MAX_MOVE;
 
-  tiltReadout.textContent = (tilt >= 0 ? '+' : '') + tilt.toFixed(1) + '°';
+  // Clamp to circular boundary
+  const dist = Math.sqrt(pctX * pctX + pctY * pctY);
+  if (dist > MAX_MOVE) {
+    pctX = (pctX / dist) * MAX_MOVE;
+    pctY = (pctY / dist) * MAX_MOVE;
+  }
+
+  bubble.style.left = (50 + pctX) + '%';
+  bubble.style.top  = (50 + pctY) + '%';
+
+  const totalTilt = Math.sqrt(tiltX * tiltX + tiltY * tiltY);
+  const isLevel   = totalTilt < 0.5;
+  const isClose   = totalTilt < 2;
+  const color     = isLevel ? '#2ade7a' : isClose ? '#f5d76e' : '#e85a3a';
+  const glow      = isLevel ? 'rgba(42,222,122,0.55)'
+                  : isClose ? 'rgba(245,215,110,0.45)'
+                  :           'rgba(232,90,58,0.45)';
+
+  bubble.style.background = color;
+  bubble.style.boxShadow  =
+    `0 0 10px ${glow}, inset 0 1px 4px rgba(255,255,255,0.35), inset 0 -1px 3px rgba(0,0,0,0.4)`;
+
+  const xStr = (tiltX >= 0 ? '+' : '') + tiltX.toFixed(1);
+  const yStr = (tiltY >= 0 ? '+' : '') + tiltY.toFixed(1);
+  tiltReadout.textContent = `${xStr}°  ${yStr}°`;
 }
 
 /* ============================================================
    CAMERA LUMINANCE → EXPOSURE METER
    ============================================================ */
-let expRefLuma = 128; // calibration reference, mid-gray default
+let expRefLuma = 128;
 let exposureRAF = null;
 const sampleCanvas = document.createElement('canvas');
 sampleCanvas.width = 80; sampleCanvas.height = 60;
 const sampleCtx = sampleCanvas.getContext('2d', { willReadFrequently: true });
 
 let lastSampleTime = 0;
-const SAMPLE_INTERVAL = 180; // ms
+const SAMPLE_INTERVAL = 180;
 
 function startExposureLoop() {
   if (exposureRAF) return;
@@ -490,20 +589,18 @@ function sampleExposure() {
   const cw = sampleCanvas.width, ch = sampleCanvas.height;
   try {
     sampleCtx.drawImage(camVideo, 0, 0, cw, ch);
-    // Sample center 50% region
     const sx = cw * 0.25, sy = ch * 0.25, sw = cw * 0.5, sh = ch * 0.5;
     const data = sampleCtx.getImageData(sx, sy, sw, sh).data;
     let sum = 0;
     const px = data.length / 4;
     for (let i = 0; i < data.length; i += 4) {
-      // Rec. 709 luma
       sum += 0.2126 * data[i] + 0.7152 * data[i+1] + 0.0722 * data[i+2];
     }
-    const meanLuma = sum / px; // 0..255
+    const meanLuma = sum / px;
     const ratio = Math.max(0.5, meanLuma) / Math.max(0.5, expRefLuma);
     const ev = Math.log2(ratio);
     renderExposure(ev);
-  } catch (e) { /* silently ignore frame errors */ }
+  } catch (e) {}
 }
 
 function renderExposure(ev) {
@@ -517,7 +614,6 @@ function renderExposure(ev) {
 }
 
 calibrateBtn.addEventListener('click', () => {
-  // Re-read one frame and set that as the new reference
   if (!camVideo.videoWidth) return;
   const cw = sampleCanvas.width, ch = sampleCanvas.height;
   sampleCtx.drawImage(camVideo, 0, 0, cw, ch);
@@ -529,7 +625,6 @@ calibrateBtn.addEventListener('click', () => {
   }
   expRefLuma = sum / (data.length / 4);
   saveState();
-  // Brief feedback
   calibrateBtn.style.color = '#2ade7a';
   setTimeout(() => { calibrateBtn.style.color = ''; }, 600);
 });
@@ -560,11 +655,9 @@ document.getElementById('sl-minus').addEventListener('click', () => bumpSlateBtn
 document.getElementById('tk-plus').addEventListener('click', () => bumpTakeBtn(1));
 document.getElementById('tk-minus').addEventListener('click', () => bumpTakeBtn(-1));
 
-// Direct edits are allowed; validate on blur for slate, save on change for both
 slateField.addEventListener('blur', () => {
   const s = parseSlate(slateField.value);
   if (!s) {
-    // Revert to last saved
     const saved = loadState();
     slateField.value = (saved && saved.slate) || '1-1';
   } else {
@@ -587,7 +680,7 @@ takeField.addEventListener('input', () => {
 });
 
 /* ============================================================
-   WAKE LOCK — keep screen on during shoot
+   WAKE LOCK
    ============================================================ */
 let wakeLock = null;
 async function requestWakeLock() {
@@ -595,7 +688,7 @@ async function requestWakeLock() {
     if ('wakeLock' in navigator) {
       wakeLock = await navigator.wakeLock.request('screen');
     }
-  } catch (e) { /* ignore */ }
+  } catch (e) {}
 }
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') requestWakeLock();
@@ -606,15 +699,12 @@ document.addEventListener('visibilitychange', () => {
    ============================================================ */
 window.addEventListener('pagehide', () => {
   if (cameraStream) cameraStream.getTracks().forEach(t => t.stop());
-  if (exposureRAF) cancelAnimationFrame(exposureRAF);
-  if (wakeLock) { try { wakeLock.release(); } catch(e){} }
+  if (exposureRAF)  cancelAnimationFrame(exposureRAF);
+  if (wakeLock)     { try { wakeLock.release(); } catch(e){} }
 });
 
-/* ============================================================
-   PREVENT DOUBLE-TAP ZOOM ON BUTTONS
-   ============================================================ */
 document.addEventListener('gesturestart', e => e.preventDefault());
-document.addEventListener('dblclick', e => e.preventDefault());
+document.addEventListener('dblclick',     e => e.preventDefault());
 
 updateStartBtn();
 </script>
