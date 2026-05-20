@@ -8,7 +8,8 @@
 <meta name="apple-mobile-web-app-title" content="Pocket Wrangler" />
 <meta name="theme-color" content="#000000" />
 <title>Pocket Wrangler</title>
-<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%23000'/><text x='90' y='110' font-family='monospace' font-size='54' font-weight='bold' fill='%23f5d76e' text-anchor='middle'>PW</text></svg>" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230a0900'/><rect x='2' y='2' width='28' height='28' rx='4' fill='none' stroke='%23f5d76e' stroke-width='1.5'/><text x='16' y='22' font-family='monospace' font-size='13' font-weight='900' fill='%23f5d76e' text-anchor='middle'>PW</text></svg>" />
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='38' fill='%230a0900'/><rect x='10' y='10' width='160' height='160' rx='28' fill='none' stroke='%23f5d76e' stroke-width='7'/><rect x='18' y='18' width='144' height='144' rx='21' fill='none' stroke='%23f5d76e' stroke-width='1.5' opacity='.3'/><text x='90' y='119' font-family='monospace' font-size='76' font-weight='900' fill='%23f5d76e' text-anchor='middle'>PW</text></svg>" />
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body {
@@ -68,13 +69,21 @@
   /* ---- App header ---- */
   .app-header {
     flex: 0 0 auto;
-    display: flex; align-items: center; justify-content: center;
-    padding: 10px 20px 6px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 28px 24px 12px;
+    gap: 8px;
   }
   .app-title {
-    font-size: 11px; font-weight: 400;
-    color: #f5d76e; letter-spacing: 5px;
+    font-size: 22px; font-weight: 700;
+    color: #f5d76e; letter-spacing: 8px;
     text-transform: uppercase;
+    flex: 0 0 auto;
+  }
+  .app-title-rule {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #f5d76e55, transparent);
   }
 
   /* ---- Shared field styles ---- */
@@ -202,6 +211,7 @@
 
   <header class="app-header">
     <span class="app-title">Pocket Wrangler</span>
+    <div class="app-title-rule"></div>
   </header>
 
   <div class="main-row">
@@ -259,9 +269,10 @@ const SLATE_LETTERS = ['A','B','C','D','E','F','G','H','J','K','L','M','N','P','
 const BASE = SLATE_LETTERS.length;
 
 function parseSlate(str) {
-  const m = String(str || '').trim().match(/^(\d+)-(\d+)([A-Z]*)$/i);
+  // Accepts both classic (1-1, 1-1A) and letter-prefixed scenes (1-A1, 7-G14BF)
+  const m = String(str || '').trim().match(/^(\d+)-([A-Z]*\d+)([A-Z]*)$/i);
   if (!m) return null;
-  return { ep: parseInt(m[1], 10), scene: parseInt(m[2], 10), variant: (m[3] || '').toUpperCase() };
+  return { ep: parseInt(m[1], 10), scene: m[2].toUpperCase(), variant: (m[3] || '').toUpperCase() };
 }
 function formatSlate(s) { return s.ep + '-' + s.scene + s.variant; }
 
@@ -453,11 +464,6 @@ slateField.addEventListener('blur', () => {
 });
 
 takeField.addEventListener('blur', () => {
-  const val = takeField.value.trim();
-  if (val === 'Sunny' || val === 'Overcast') return;
-  let n = parseInt(val, 10);
-  if (isNaN(n) || n < 1) n = 1;
-  takeField.value = String(n);
   saveState();
 });
 
