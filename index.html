@@ -71,14 +71,18 @@
     flex: 0 0 auto;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    padding: 28px 24px 12px;
-    gap: 8px;
+    padding: 18px 24px 10px;
+    gap: 10px;
   }
+  .app-header-top {
+    display: flex; align-items: center;
+    gap: 14px;
+  }
+  .app-logo { width: 44px; height: 44px; flex: 0 0 44px; }
   .app-title {
-    font-size: 22px; font-weight: 700;
-    color: #f5d76e; letter-spacing: 8px;
-    text-transform: uppercase;
-    flex: 0 0 auto;
+    font-size: 30px; font-weight: 800;
+    color: #f5d76e; letter-spacing: 6px;
+    text-transform: uppercase; line-height: 1.1;
   }
   .app-title-rule {
     width: 100%;
@@ -114,8 +118,11 @@
     display: flex; align-items: center; justify-content: center;
   }
   .btn:active { color: #fff; border-color: #555; background: #0f0f0f; }
-  .btn.cond { font-size: 9px; letter-spacing: 0.5px; color: #666; }
-  .btn.cond:active { color: #f5d76e; }
+  .btn.cond { font-size: 9px; letter-spacing: 0.5px; }
+  .btn-left  { color: #5b9edb; border-color: #1a3348; background: #070e18; }
+  .btn-left:active  { color: #8cc4f0; border-color: #2a5a80; background: #0e1f32; }
+  .btn-right { color: #f5d76e; border-color: #3a2e0a; background: #120e03; }
+  .btn-right:active { color: #fff8e0; border-color: #f5d76e; background: #1e1800; }
   .btn-pair { display: flex; gap: 7px; }
 
   /* ---- Tilt values ---- */
@@ -210,7 +217,19 @@
 <div id="app">
 
   <header class="app-header">
-    <span class="app-title">Pocket Wrangler</span>
+    <div class="app-header-top">
+      <svg class="app-logo" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="15" width="38" height="26" rx="3" stroke="#f5d76e" stroke-width="1.8"/>
+        <rect x="3" y="6" width="38" height="11" rx="2" stroke="#f5d76e" stroke-width="1.8" fill="#f5d76e11"/>
+        <line x1="11" y1="6" x2="7"  y2="17" stroke="#f5d76e" stroke-width="2"/>
+        <line x1="19" y1="6" x2="15" y2="17" stroke="#f5d76e" stroke-width="2"/>
+        <line x1="27" y1="6" x2="23" y2="17" stroke="#f5d76e" stroke-width="2"/>
+        <line x1="35" y1="6" x2="31" y2="17" stroke="#f5d76e" stroke-width="2"/>
+        <line x1="8"  y1="27" x2="36" y2="27" stroke="#f5d76e" stroke-width="1" stroke-opacity="0.25"/>
+        <line x1="8"  y1="34" x2="36" y2="34" stroke="#f5d76e" stroke-width="1" stroke-opacity="0.25"/>
+      </svg>
+      <span class="app-title">POCKET<br>WRANGLER</span>
+    </div>
     <div class="app-title-rule"></div>
   </header>
 
@@ -234,16 +253,16 @@
     <!-- Buttons -->
     <div class="buttons-panel">
       <div class="btn-pair">
-        <button class="btn" id="sl-minus">SL−</button>
-        <button class="btn" id="sl-plus">SL+</button>
+        <button class="btn btn-left"  id="sl-minus">SL−</button>
+        <button class="btn btn-right" id="sl-plus">SL+</button>
       </div>
       <div class="btn-pair">
-        <button class="btn" id="tk-minus">TK−</button>
-        <button class="btn" id="tk-plus">TK+</button>
+        <button class="btn btn-left"  id="tk-minus">TK−</button>
+        <button class="btn btn-right" id="tk-plus">TK+</button>
       </div>
       <div class="btn-pair">
-        <button class="btn cond" id="sunny-btn">Sunny</button>
-        <button class="btn cond" id="overcast-btn">Overcast</button>
+        <button class="btn cond btn-left"  id="overcast-btn">Overcast</button>
+        <button class="btn cond btn-right" id="sunny-btn">Sunny</button>
       </div>
     </div>
 
@@ -255,7 +274,7 @@
     <span class="tilt-val" id="tilt-y">—</span>
   </div>
 
-  <div class="credits">made by nadan &nbsp;·&nbsp; v0.2</div>
+  <div class="credits">made by nadan &nbsp;·&nbsp; v0.3</div>
 
 </div>
 
@@ -348,6 +367,7 @@ motionBtn.addEventListener('click', async () => {
         motionGranted = true;
         motionBtn.classList.add('granted');
         motionBtn.textContent = 'Level enabled';
+        localStorage.setItem('motionGranted', 'true');
       } else {
         motionBtn.textContent = 'Denied — tap to retry';
       }
@@ -356,6 +376,7 @@ motionBtn.addEventListener('click', async () => {
       motionGranted = true;
       motionBtn.classList.add('granted');
       motionBtn.textContent = 'Level enabled';
+      localStorage.setItem('motionGranted', 'true');
     }
   } catch (err) {
     motionBtn.textContent = 'Error: ' + err.message;
@@ -363,7 +384,22 @@ motionBtn.addEventListener('click', async () => {
   updateStartBtn();
 });
 
-startBtn.addEventListener('click', () => {
+startBtn.addEventListener('click', async () => {
+  if (motionGranted && !orientationAttached) {
+    if (typeof DeviceOrientationEvent !== 'undefined' &&
+        typeof DeviceOrientationEvent.requestPermission === 'function') {
+      try {
+        const result = await DeviceOrientationEvent.requestPermission();
+        if (result === 'granted') {
+          attachOrientation();
+        } else {
+          localStorage.removeItem('motionGranted');
+        }
+      } catch(e) {}
+    } else {
+      attachOrientation();
+    }
+  }
   overlay.style.display = 'none';
   app.classList.add('visible');
   requestWakeLock();
@@ -380,7 +416,10 @@ startBtn.addEventListener('click', () => {
 const TILT_ALPHA = 0.12;
 let smoothX = 0, smoothY = 0, tiltReady = false;
 
+let orientationAttached = false;
 function attachOrientation() {
+  if (orientationAttached) return;
+  orientationAttached = true;
   window.addEventListener('deviceorientation', onOrientation, true);
 }
 
@@ -404,14 +443,21 @@ function onOrientation(e) {
   renderTilt(smoothX, smoothY);
 }
 
+function formatTilt(v) {
+  const sign = v >= 0 ? '+' : '-';
+  const fixed = Math.abs(v).toFixed(1); // e.g. "9.1" or "10.2"
+  const padded = fixed.padStart(4, ' '); // always "XX.X" width
+  return sign + padded + '°';
+}
+
 function renderTilt(tiltX, tiltY) {
   const total = Math.sqrt(tiltX * tiltX + tiltY * tiltY);
   const color = total < 0.5 ? '#2ade7a'
               : total < 2   ? '#f5d76e'
               :                '#e85a3a';
 
-  tiltElX.textContent = (tiltX >= 0 ? '+' : '') + tiltX.toFixed(1) + '°';
-  tiltElY.textContent = (tiltY >= 0 ? '+' : '') + tiltY.toFixed(1) + '°';
+  tiltElX.textContent = formatTilt(tiltX);
+  tiltElY.textContent = formatTilt(tiltY);
   tiltElX.style.color = color;
   tiltElY.style.color = color;
 }
@@ -489,6 +535,11 @@ window.addEventListener('pagehide', () => {
 document.addEventListener('gesturestart', e => e.preventDefault());
 document.addEventListener('dblclick',     e => e.preventDefault());
 
+if (localStorage.getItem('motionGranted') === 'true') {
+  motionGranted = true;
+  motionBtn.classList.add('granted');
+  motionBtn.textContent = 'Level enabled';
+}
 updateStartBtn();
 </script>
 </body>
