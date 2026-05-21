@@ -5,41 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no, maximum-scale=1" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="VFX Slate" />
-<meta name="theme-color" content="#0b0b0d" />
-<title>VFX Slate</title>
-
-<!-- Icon: a stylized clapperboard -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230b0b0d'/><rect x='3' y='10' width='26' height='19' rx='3' fill='%23e8e4d9'/><rect x='3' y='6' width='26' height='6' rx='2' fill='%23111'/><line x1='3' y1='9' x2='10' y2='6' stroke='%23e8e4d9' stroke-width='2'/><line x1='12' y1='9' x2='19' y2='6' stroke='%23e8e4d9' stroke-width='2'/><line x1='21' y1='9' x2='28' y2='6' stroke='%23e8e4d9' stroke-width='2'/><text x='16' y='24' font-family='monospace' font-size='8' font-weight='900' fill='%230b0b0d' text-anchor='middle'>SLATE</text></svg>" />
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%230b0b0d'/><rect x='14' y='56' width='152' height='110' rx='14' fill='%23e8e4d9'/><rect x='14' y='34' width='152' height='34' rx='10' fill='%231a1a1f'/><line x1='14' y1='52' x2='54' y2='34' stroke='%23e8e4d9' stroke-width='10'/><line x1='68' y1='52' x2='108' y2='34' stroke='%23e8e4d9' stroke-width='10'/><line x1='122' y1='52' x2='162' y2='34' stroke='%23e8e4d9' stroke-width='10'/><text x='90' y='130' font-family='monospace' font-size='44' font-weight='900' fill='%230b0b0d' text-anchor='middle'>SL</text><text x='90' y='158' font-family='monospace' font-size='18' font-weight='700' fill='%230b0b0d55' text-anchor='middle'>POCKET</text></svg>" />
-
+<meta name="apple-mobile-web-app-title" content="Pocket Wrangler" />
+<meta name="theme-color" content="#000000" />
+<title>Pocket Wrangler</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230a0900'/><rect x='2' y='2' width='28' height='28' rx='4' fill='none' stroke='%23f5d76e' stroke-width='1.5'/><text x='16' y='22' font-family='monospace' font-size='13' font-weight='900' fill='%23f5d76e' text-anchor='middle'>PW</text></svg>" />
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='38' fill='%230a0900'/><rect x='10' y='10' width='160' height='160' rx='28' fill='none' stroke='%23f5d76e' stroke-width='7'/><rect x='18' y='18' width='144' height='144' rx='21' fill='none' stroke='%23f5d76e' stroke-width='1.5' opacity='.3'/><text x='90' y='119' font-family='monospace' font-size='76' font-weight='900' fill='%23f5d76e' text-anchor='middle'>PW</text></svg>" />
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Bebas+Neue&display=swap');
-
-  :root {
-    --bg:        #0b0b0d;
-    --bg2:       #111116;
-    --bg3:       #18181f;
-    --border:    #242430;
-    --border2:   #2e2e3e;
-    --text:      #e8e4d9;
-    --muted:     #5a5a72;
-    --dim:       #30303f;
-    --gold:      #f0c040;
-    --gold-dim:  #f0c04022;
-    --green:     #3ddba0;
-    --yellow:    #f5c842;
-    --red:       #f05050;
-    --font-mono: 'DM Mono', ui-monospace, monospace;
-    --font-disp: 'Bebas Neue', impact, sans-serif;
-  }
-
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body {
     margin: 0; padding: 0;
     width: 100%; height: 100%;
-    background: var(--bg); color: var(--text);
-    font-family: var(--font-mono);
+    background: #000; color: #fff;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
     overflow: hidden;
     -webkit-user-select: none; user-select: none;
     -webkit-touch-callout: none;
@@ -52,495 +29,247 @@
     display: flex; flex-direction: column;
   }
 
-  /* ========== OVERLAY ========== */
+  /* ---- Overlay ---- */
   #overlay {
     position: fixed; inset: 0;
-    background: var(--bg);
+    background: #000;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    gap: 0; z-index: 100; padding: 40px 32px;
+    gap: 12px; z-index: 100; padding: 32px;
   }
-
-  /* Clapperboard SVG logo */
-  .logo-wrap {
-    margin-bottom: 28px;
-    display: flex; flex-direction: column; align-items: center; gap: 10px;
+  #overlay h1 {
+    margin: 0 0 4px;
+    font-size: 13px; font-weight: 400;
+    color: #f5d76e; letter-spacing: 6px;
   }
-  .logo-board {
-    width: 72px; height: 60px;
-    position: relative;
-  }
-  .logo-board svg { width: 100%; height: 100%; }
-
-  .logo-title {
-    font-family: var(--font-disp);
-    font-size: 32px;
-    letter-spacing: 6px;
-    color: var(--text);
-    text-transform: uppercase;
-  }
-  .logo-sub {
-    font-size: 10px;
-    letter-spacing: 4px;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-top: -6px;
-  }
-
   #overlay p {
-    margin: 0 0 28px; font-size: 11px; color: var(--muted);
-    text-align: center; max-width: 260px; line-height: 1.8;
-    letter-spacing: 0.5px;
+    margin: 0 0 24px; font-size: 11px; color: #444;
+    text-align: center; max-width: 280px; line-height: 1.7;
   }
   .perm-btn {
-    background: transparent; color: var(--muted);
-    border: 1px solid var(--border2); border-radius: 6px;
-    padding: 14px 32px; min-width: 220px;
-    font-family: var(--font-mono); font-size: 10px; font-weight: 500;
-    letter-spacing: 3px; cursor: pointer; touch-action: manipulation;
-    transition: all 0.2s; text-transform: uppercase;
-    margin-bottom: 10px;
+    background: transparent; color: #555;
+    border: 1px solid #222; border-radius: 4px;
+    padding: 12px 32px; min-width: 200px;
+    font-family: inherit; font-size: 11px; font-weight: 400;
+    letter-spacing: 2px; cursor: pointer; touch-action: manipulation;
   }
-  .perm-btn:active { color: var(--text); border-color: var(--border2); background: var(--bg3); }
-  .perm-btn.granted { color: var(--green); border-color: var(--green); background: #3ddba011; }
+  .perm-btn:active { color: #888; border-color: #333; }
+  .perm-btn.granted { color: #2ade7a; border-color: #1a3a22; }
   .perm-btn.granted::before { content: "✓  "; }
   #start-btn {
-    background: var(--gold); color: #000; border-color: var(--gold);
-    font-weight: 700; letter-spacing: 4px;
-    margin-bottom: 0;
+    background: #f5d76e; color: #000; border-color: #f5d76e;
+    margin-top: 8px; font-weight: 700; letter-spacing: 3px;
   }
-  #start-btn:disabled { opacity: 0.12; pointer-events: none; }
-  #start-btn:not(:disabled):active { background: #d4a830; border-color: #d4a830; }
+  #start-btn:disabled { opacity: 0.15; pointer-events: none; }
 
-  /* ========== APP SHELL ========== */
+  /* ---- App shell ---- */
   #app { display: none; flex: 1; flex-direction: column; height: 100%; }
-  #app.visible { display: flex; animation: fadeIn 0.3s ease; }
-  @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+  #app.visible { display: flex; }
 
-  /* ========== APP HALVES ========== */
-  /* Top half: header + slate controls */
-  .top-half {
-    flex: 1 1 50%;
-    display: flex; flex-direction: column;
-    min-height: 0;
-    border-bottom: 1px solid var(--border);
-  }
-  /* Bottom half: level indicator */
-  .bottom-half {
-    flex: 1 1 50%;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    min-height: 0;
-    padding: 16px 20px;
-    gap: 16px;
-  }
-
-  /* ========== HEADER ========== */
+  /* ---- App header ---- */
   .app-header {
     flex: 0 0 auto;
-    display: flex; align-items: center;
-    padding: 16px 20px 10px;
-    border-bottom: 1px solid var(--border);
-    gap: 12px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 28px 24px 12px;
+    gap: 8px;
   }
-  .header-logo {
-    display: flex; align-items: center; gap: 9px;
-  }
-  .header-clap {
-    width: 28px; height: 22px; flex: 0 0 auto;
-  }
-  .header-clap svg { width: 100%; height: 100%; }
-  .header-title {
-    font-family: var(--font-disp);
-    font-size: 20px; letter-spacing: 4px;
-    color: var(--text); line-height: 1;
-  }
-
-  /* ========== LEVEL PANEL (bottom half) ========== */
-  .level-label {
-    font-size: 9px; color: var(--muted);
-    letter-spacing: 4px; text-transform: uppercase;
-  }
-  .level-pill {
-    display: flex; align-items: center; gap: 16px;
-    padding: 18px 32px; border-radius: 999px;
-    background: var(--bg3); border: 1px solid var(--border2);
-    width: 100%; max-width: 360px; justify-content: center;
-  }
-  .level-dot {
-    width: 14px; height: 14px; border-radius: 50%;
-    background: var(--dim);
-    transition: background 0.3s;
+  .app-title {
+    font-size: 22px; font-weight: 700;
+    color: #f5d76e; letter-spacing: 8px;
+    text-transform: uppercase;
     flex: 0 0 auto;
-    box-shadow: 0 0 0 0 transparent;
-    transition: background 0.3s, box-shadow 0.3s;
   }
-  .level-dot.lit {
-    box-shadow: 0 0 10px 2px currentColor;
-  }
-  .level-readout {
-    font-family: var(--font-disp);
-    font-size: 38px; letter-spacing: 3px;
-    color: var(--muted); font-variant-numeric: tabular-nums;
-    transition: color 0.3s;
-    white-space: nowrap; line-height: 1;
-  }
-  .level-bar-wrap {
-    width: 100%; max-width: 360px;
-    height: 4px; border-radius: 2px;
-    background: var(--border);
-    overflow: hidden;
-  }
-  .level-bar {
-    height: 100%; border-radius: 2px;
-    background: var(--dim);
-    width: 50%;
-    transform-origin: center;
-    transition: width 0.15s, background 0.3s;
+  .app-title-rule {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #f5d76e55, transparent);
   }
 
-  /* ========== MAIN CONTENT (top half inner) ========== */
+  /* ---- Shared field styles ---- */
+  .field {
+    background: transparent; color: #fff;
+    border: none;
+    border-bottom: 1px solid #2a2a2a;
+    padding: 2px 0 5px;
+    font-family: inherit; font-size: 40px; font-weight: 400;
+    letter-spacing: 2px;
+    outline: none; -webkit-appearance: none;
+    min-width: 0; width: 100%;
+    -webkit-user-select: text; user-select: text;
+  }
+  .field:focus { border-bottom-color: #444; }
+  #take-field { color: #f5d76e; font-size: 30px; letter-spacing: 1px; }
+
+  /* ---- Shared button styles ---- */
+  .btn {
+    flex: 1;
+    background: transparent; color: #888;
+    border: 1px solid #2e2e2e; border-radius: 4px;
+    height: 44px; padding: 0;
+    font-family: inherit; font-size: 10px; font-weight: 500;
+    letter-spacing: 1.5px; cursor: pointer;
+    touch-action: manipulation;
+    -webkit-user-select: none; user-select: none;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .btn:active { color: #fff; border-color: #555; background: #0f0f0f; }
+  .btn.cond { font-size: 9px; letter-spacing: 0.5px; color: #666; }
+  .btn.cond:active { color: #f5d76e; }
+  .btn-pair { display: flex; gap: 7px; }
+
+  /* ---- Tilt values ---- */
+  .tilt-val {
+    font-size: 40px; font-weight: 200;
+    letter-spacing: -1px;
+    color: #2a2a2a;
+    transition: color 0.25s;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  /* ===================== LANDSCAPE (default) ===================== */
   .main-row {
     flex: 1 1 auto;
     display: flex;
     flex-direction: row;
-    align-items: stretch;
+    align-items: center;
+    padding: 8px 20px;
+    gap: 20px;
     min-height: 0;
     overflow: hidden;
   }
 
-  /* ---- Fields panel ---- */
   .fields-panel {
     flex: 1 1 auto;
     display: flex; flex-direction: column;
-    justify-content: center;
-    padding: 16px 24px 16px;
-    gap: 0;
-    border-right: 1px solid var(--border);
+    justify-content: center; gap: 12px;
+    min-width: 0;
   }
-
-  .field-block {
-    flex: 1;
-    display: flex; flex-direction: column;
-    justify-content: center;
-    padding: 10px 0;
+  .field-row {
+    display: flex; align-items: baseline; gap: 12px;
   }
-  .field-block + .field-block {
-    border-top: 1px solid var(--border);
-  }
-
   .fl {
-    font-size: 9px; font-weight: 500;
-    color: var(--muted); letter-spacing: 4px;
-    text-transform: uppercase; margin-bottom: 2px;
+    font-size: 9px; color: #777;
+    letter-spacing: 2px; flex: 0 0 22px;
   }
 
-  .field {
-    background: transparent; color: var(--text);
-    border: none; outline: none;
-    padding: 0;
-    font-family: var(--font-disp);
-    font-size: 58px; line-height: 1;
-    letter-spacing: 2px;
-    -webkit-appearance: none;
-    min-width: 0; width: 100%;
-    -webkit-user-select: text; user-select: text;
-  }
-  #take-field {
-    color: var(--gold);
-  }
-  .field::placeholder { color: var(--dim); }
-  .field:focus { color: var(--text); }
-  #take-field:focus { color: var(--gold); }
-
-  /* ---- Buttons panel ---- */
   .buttons-panel {
-    flex: 0 0 148px;
+    flex: 0 0 130px;
     display: flex; flex-direction: column;
-    padding: 10px 10px;
     gap: 6px;
+  }
+
+  /* ---- Tilt bar (always at bottom, above credits) ---- */
+  .tilt-bar {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     justify-content: center;
-  }
-
-  .btn-section-label {
-    font-size: 8px; color: var(--dim);
-    letter-spacing: 3px; text-transform: uppercase;
-    text-align: center; padding: 2px 0;
-  }
-
-  .btn {
-    flex: 1;
-    background: var(--bg2); color: var(--muted);
-    border: 1px solid var(--border); border-radius: 8px;
-    padding: 0; min-height: 52px;
-    font-family: var(--font-mono); font-size: 10px; font-weight: 500;
-    letter-spacing: 2px; cursor: pointer;
-    touch-action: manipulation;
-    display: flex; align-items: center; justify-content: center;
-    flex-direction: column; gap: 2px;
-    transition: background 0.1s, border-color 0.1s, color 0.1s;
-    position: relative; overflow: hidden;
-  }
-  .btn:active {
-    color: var(--text); border-color: var(--border2);
-    background: var(--bg3);
-    transform: scale(0.97);
-  }
-  .btn-icon {
-    font-size: 16px; line-height: 1;
-  }
-  .btn-label {
-    font-size: 8px; letter-spacing: 2px; color: inherit; opacity: 0.7;
-  }
-
-  .btn.primary {
-    background: var(--gold-dim); border-color: #f0c04033;
-    color: var(--gold);
-  }
-  .btn.primary:active {
-    background: #f0c04022; border-color: var(--gold);
-  }
-
-  .btn-pair {
-    display: flex; gap: 6px; flex: 1;
-  }
-
-  .btn.cond {
-    font-size: 9px; letter-spacing: 1px;
-    color: var(--dim);
-  }
-  .btn.cond:active { color: var(--gold); border-color: #f0c04055; background: var(--gold-dim); }
-  .btn.cond.active {
-    color: var(--gold); border-color: #f0c04055; background: var(--gold-dim);
+    gap: 28px;
+    padding: 8px 20px 10px;
+    border-top: 1px solid #111;
   }
 
   /* ---- Credits ---- */
   .credits {
     flex: 0 0 auto;
     text-align: center;
-    font-size: 9px; color: var(--dim);
+    font-size: 11px; color: #999;
     letter-spacing: 2px;
-    padding: 4px 0 5px;
-    border-top: 1px solid var(--border);
+    padding: 4px 0 8px;
   }
 
-  /* ========== PORTRAIT ========== */
+  /* ===================== PORTRAIT ===================== */
   @media (orientation: portrait) {
     .main-row {
       flex-direction: column;
+      align-items: stretch;
+      justify-content: center;
+      padding: 12px 24px 8px;
+      gap: 22px;
     }
-    .fields-panel {
-      flex: 1 1 auto;
-      border-right: none;
-      padding: 12px 24px 10px;
-    }
-    .field { font-size: 66px; }
-    .buttons-panel {
-      flex: 0 0 auto;
-      border-top: 1px solid var(--border);
-      width: 100%;
-      flex-direction: row;
-      flex-wrap: wrap;
-      padding: 8px 12px;
-      gap: 6px;
-      min-height: 0;
-    }
-    .sl-group, .tk-group {
-      flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 130px;
-    }
-    .cond-group {
-      flex: 0 0 100%;
-      display: flex; gap: 6px;
-    }
-    .btn { min-height: 52px; }
-    .btn-section-label { display: none; }
-    .bottom-half { padding: 12px 20px; gap: 12px; }
-    .level-readout { font-size: 30px; }
-    .level-pill { padding: 14px 24px; }
+    .fields-panel { gap: 16px; }
+    .buttons-panel { flex: 0 0 auto; width: auto; }
+    .tilt-val { font-size: 46px; }
   }
-
-  /* ========== LANDSCAPE ========== */
-  @media (orientation: landscape) {
-    .sl-group, .tk-group { display: contents; }
-    .cond-group { display: contents; }
-  }
-
-  /* ========== HAPTIC FLASH ========== */
-  @keyframes tapFlash {
-    0%   { opacity: 1 }
-    50%  { opacity: 0.5 }
-    100% { opacity: 1 }
-  }
-  .tapped { animation: tapFlash 0.1s ease; }
 </style>
 </head>
 <body>
 
-<!-- ==================== OVERLAY ==================== -->
+<!-- OVERLAY -->
 <div id="overlay">
-
-  <div class="logo-wrap">
-    <!-- Inline clapperboard logo -->
-    <div class="logo-board">
-      <svg viewBox="0 0 72 60" xmlns="http://www.w3.org/2000/svg">
-        <!-- Board body -->
-        <rect x="2" y="18" width="68" height="40" rx="5" fill="#e8e4d9"/>
-        <!-- Stripes top bar -->
-        <rect x="2" y="4" width="68" height="16" rx="4" fill="#1a1a22"/>
-        <!-- Stripe diagonals -->
-        <clipPath id="ck"><rect x="2" y="4" width="68" height="16" rx="4"/></clipPath>
-        <g clip-path="url(#ck)">
-          <rect x="2"  y="4" width="10" height="16" fill="#e8e4d9"/>
-          <rect x="16" y="4" width="10" height="16" fill="#e8e4d9"/>
-          <rect x="30" y="4" width="10" height="16" fill="#e8e4d9"/>
-          <rect x="44" y="4" width="10" height="16" fill="#e8e4d9"/>
-          <rect x="58" y="4" width="14" height="16" fill="#e8e4d9"/>
-          <!-- Angled cuts -->
-          <polygon points="2,4 12,4 2,20" fill="#1a1a22"/>
-          <polygon points="16,4 26,4 16,20" fill="#1a1a22"/>
-          <polygon points="30,4 40,4 30,20" fill="#1a1a22"/>
-          <polygon points="44,4 54,4 44,20" fill="#1a1a22"/>
-          <polygon points="58,4 68,4 58,20" fill="#1a1a22"/>
-        </g>
-        <!-- Hinge line -->
-        <rect x="2" y="18" width="68" height="2" fill="#0b0b0d33"/>
-        <!-- SL text on board -->
-        <text x="36" y="46" font-family="'Bebas Neue', monospace" font-size="22" font-weight="900" fill="#0b0b0d" text-anchor="middle" letter-spacing="3">SLATE</text>
-      </svg>
-    </div>
-
-    <div class="logo-title">VFX Slate</div>
-    <div class="logo-sub">Pocket Wrangler</div>
-  </div>
-
-  <p>Motion access is needed for the level indicator. Nothing ever leaves your device.</p>
-  <button class="perm-btn" id="motion-btn">Enable Level</button>
+  <h1>POCKET WRANGLER</h1>
+  <p>Motion access is needed for the level indicator. Nothing leaves your device.</p>
+  <button class="perm-btn" id="motion-btn">Enable level</button>
   <button class="perm-btn" id="start-btn" disabled>Start →</button>
 </div>
 
-<!-- ==================== APP ==================== -->
+<!-- APP -->
 <div id="app">
 
-  <!-- ===== TOP HALF: header + slate controls ===== -->
-  <div class="top-half">
+  <header class="app-header">
+    <span class="app-title">Pocket Wrangler</span>
+    <div class="app-title-rule"></div>
+  </header>
 
-    <header class="app-header">
-      <div class="header-logo">
-        <div class="header-clap">
-          <svg viewBox="0 0 36 28" xmlns="http://www.w3.org/2000/svg">
-            <rect x="1" y="10" width="34" height="17" rx="3" fill="#e8e4d9"/>
-            <rect x="1" y="3" width="34" height="9" rx="3" fill="#1a1a22"/>
-            <clipPath id="hck"><rect x="1" y="3" width="34" height="9" rx="3"/></clipPath>
-            <g clip-path="url(#hck)">
-              <rect x="1"  y="3" width="6" height="9" fill="#e8e4d9"/>
-              <rect x="11" y="3" width="6" height="9" fill="#e8e4d9"/>
-              <rect x="21" y="3" width="6" height="9" fill="#e8e4d9"/>
-              <rect x="31" y="3" width="6" height="9" fill="#e8e4d9"/>
-              <polygon points="1,3  7,3  1,12"  fill="#1a1a22"/>
-              <polygon points="11,3 17,3 11,12" fill="#1a1a22"/>
-              <polygon points="21,3 27,3 21,12" fill="#1a1a22"/>
-              <polygon points="31,3 37,3 31,12" fill="#1a1a22"/>
-            </g>
-            <text x="18" y="22" font-family="monospace" font-size="8" font-weight="900" fill="#0b0b0d" text-anchor="middle">SL</text>
-          </svg>
-        </div>
-        <div class="header-title">Pocket Wrangler</div>
+  <div class="main-row">
+
+    <!-- Fields -->
+    <div class="fields-panel">
+      <div class="field-row">
+        <span class="fl">SL</span>
+        <input class="field" id="slate-field" value="1-1"
+               inputmode="text" autocapitalize="characters"
+               autocomplete="off" spellcheck="false" />
       </div>
-    </header>
-
-    <div class="main-row">
-
-      <!-- ---- Fields ---- -->
-      <div class="fields-panel">
-
-        <div class="field-block">
-          <div class="fl">Scene / Slate</div>
-          <input class="field" id="slate-field" value="1-1"
-                 inputmode="text" autocapitalize="characters"
-                 autocomplete="off" spellcheck="false" />
-        </div>
-
-        <div class="field-block">
-          <div class="fl">Take</div>
-          <input class="field" id="take-field" value="1"
-                 inputmode="text" autocomplete="off" spellcheck="false" />
-        </div>
-
+      <div class="field-row">
+        <span class="fl">TK</span>
+        <input class="field" id="take-field" value="1"
+               inputmode="text" autocomplete="off" spellcheck="false" />
       </div>
-
-      <!-- ---- Buttons ---- -->
-      <div class="buttons-panel">
-
-        <!-- SL group -->
-        <div class="sl-group">
-          <div class="btn-section-label">Scene</div>
-          <div class="btn-pair">
-            <button class="btn" id="sl-minus">
-              <span class="btn-icon">−</span>
-              <span class="btn-label">SL</span>
-            </button>
-            <button class="btn primary" id="sl-plus">
-              <span class="btn-icon">+</span>
-              <span class="btn-label">SL</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- TK group -->
-        <div class="tk-group">
-          <div class="btn-section-label">Take</div>
-          <div class="btn-pair">
-            <button class="btn" id="tk-minus">
-              <span class="btn-icon">−</span>
-              <span class="btn-label">TK</span>
-            </button>
-            <button class="btn primary" id="tk-plus">
-              <span class="btn-icon">+</span>
-              <span class="btn-label">TK</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Condition presets -->
-        <div class="cond-group">
-          <div class="btn-pair">
-            <button class="btn cond" id="sunny-btn">☀ Sunny</button>
-            <button class="btn cond" id="overcast-btn">☁ Overcast</button>
-          </div>
-        </div>
-
-      </div>
-
     </div>
 
-  </div><!-- /top-half -->
-
-  <!-- ===== BOTTOM HALF: level indicator ===== -->
-  <div class="bottom-half">
-    <div class="level-label">Level</div>
-    <div class="level-pill" id="level-pill">
-      <div class="level-dot" id="level-dot"></div>
-      <span class="level-readout" id="level-readout">– –</span>
+    <!-- Buttons -->
+    <div class="buttons-panel">
+      <div class="btn-pair">
+        <button class="btn" id="sl-minus">SL−</button>
+        <button class="btn" id="sl-plus">SL+</button>
+      </div>
+      <div class="btn-pair">
+        <button class="btn" id="tk-minus">TK−</button>
+        <button class="btn" id="tk-plus">TK+</button>
+      </div>
+      <div class="btn-pair">
+        <button class="btn cond" id="sunny-btn">Sunny</button>
+        <button class="btn cond" id="overcast-btn">Overcast</button>
+      </div>
     </div>
-    <div class="level-bar-wrap">
-      <div class="level-bar" id="level-bar"></div>
-    </div>
-  </div><!-- /bottom-half -->
 
-  <div class="credits">pocket wrangler &nbsp;·&nbsp; v0.3 &nbsp;·&nbsp; by nadan</div>
+  </div>
 
-</div><!-- /app -->
+  <!-- Level display -->
+  <div class="tilt-bar">
+    <span class="tilt-val" id="tilt-x">—</span>
+    <span class="tilt-val" id="tilt-y">—</span>
+  </div>
+
+  <div class="credits">made by nadan &nbsp;·&nbsp; v0.2</div>
+
+</div>
 
 <script>
 'use strict';
 
-/* =====================================================================
+/* ============================================================
    SLATE LOGIC
-   ===================================================================== */
+   ============================================================ */
 const SLATE_LETTERS = ['A','B','C','D','E','F','G','H','J','K','L','M','N','P','Q','R','S','T','U','V','W','X','Y','Z'];
 const BASE = SLATE_LETTERS.length;
 
 function parseSlate(str) {
+  // Accepts both classic (1-1, 1-1A) and letter-prefixed scenes (1-A1, 7-G14BF)
   const m = String(str || '').trim().match(/^(\d+)-([A-Z]*\d+)([A-Z]*)$/i);
   if (!m) return null;
   return { ep: parseInt(m[1], 10), scene: m[2].toUpperCase(), variant: (m[3] || '').toUpperCase() };
@@ -568,10 +297,10 @@ function indexToVariant(n) {
   return out;
 }
 
-/* =====================================================================
+/* ============================================================
    PERSISTENT STATE
-   ===================================================================== */
-const STORAGE_KEY = 'vfx-slate-state-v2';
+   ============================================================ */
+const STORAGE_KEY = 'vfx-slate-state-v1';
 
 function loadState() {
   try {
@@ -588,22 +317,21 @@ function saveState() {
   } catch (e) {}
 }
 
-/* =====================================================================
-   DOM REFS
-   ===================================================================== */
-const overlay       = document.getElementById('overlay');
-const motionBtn     = document.getElementById('motion-btn');
-const startBtn      = document.getElementById('start-btn');
-const app           = document.getElementById('app');
-const slateField    = document.getElementById('slate-field');
-const takeField     = document.getElementById('take-field');
-const levelDot      = document.getElementById('level-dot');
-const levelReadout  = document.getElementById('level-readout');
-const levelBar      = document.getElementById('level-bar');
+/* ============================================================
+   DOM
+   ============================================================ */
+const overlay    = document.getElementById('overlay');
+const motionBtn  = document.getElementById('motion-btn');
+const startBtn   = document.getElementById('start-btn');
+const app        = document.getElementById('app');
+const slateField = document.getElementById('slate-field');
+const takeField  = document.getElementById('take-field');
+const tiltElX    = document.getElementById('tilt-x');
+const tiltElY    = document.getElementById('tilt-y');
 
-/* =====================================================================
+/* ============================================================
    PERMISSIONS
-   ===================================================================== */
+   ============================================================ */
 let motionGranted = false;
 
 function updateStartBtn() {
@@ -646,9 +374,9 @@ startBtn.addEventListener('click', () => {
   }
 });
 
-/* =====================================================================
-   ORIENTATION → LEVEL DISPLAY
-   ===================================================================== */
+/* ============================================================
+   ORIENTATION → TILT DISPLAY
+   ============================================================ */
 const TILT_ALPHA = 0.12;
 let smoothX = 0, smoothY = 0, tiltReady = false;
 
@@ -672,15 +400,8 @@ function onOrientation(e) {
     smoothX += TILT_ALPHA * (inputX - smoothX);
     smoothY += TILT_ALPHA * (inputY - smoothY);
   }
-  renderLevel(smoothX, smoothY);
-}
 
-function formatTilt(val) {
-  const sign = val >= 0 ? '+' : '-';
-  const abs = Math.abs(val).toFixed(1);
-  const dot = abs.indexOf('.');
-  const intPart = abs.slice(0, dot).padStart(2, ' ');
-  return sign + intPart + '.' + abs.slice(dot + 1) + '°';
+  renderTilt(smoothX, smoothY);
 }
 
 function renderTilt(tiltX, tiltY) {
@@ -689,20 +410,15 @@ function renderTilt(tiltX, tiltY) {
               : total < 2   ? '#f5d76e'
               :                '#e85a3a';
 
-  tiltElX.textContent = formatTilt(tiltX);
-  tiltElY.textContent = formatTilt(tiltY);
+  tiltElX.textContent = (tiltX >= 0 ? '+' : '') + tiltX.toFixed(1) + '°';
+  tiltElY.textContent = (tiltY >= 0 ? '+' : '') + tiltY.toFixed(1) + '°';
   tiltElX.style.color = color;
   tiltElY.style.color = color;
 }
 
-function flashBtn(btn) {
-  btn.classList.add('tapped');
-  setTimeout(() => btn.classList.remove('tapped'), 100);
-}
-
-/* =====================================================================
+/* ============================================================
    SLATE / TAKE CONTROLS
-   ===================================================================== */
+   ============================================================ */
 function bumpSlateBtn(direction) {
   const s = parseSlate(slateField.value);
   if (!s) return;
@@ -712,52 +428,27 @@ function bumpSlateBtn(direction) {
   slateField.value = formatSlate(s);
   if (!isNaN(parseInt(takeField.value.trim(), 10))) takeField.value = '1';
   saveState();
-  vibrate(8);
 }
 
 function bumpTakeBtn(direction) {
   const val = takeField.value.trim();
   let n = parseInt(val, 10);
   if (isNaN(n)) {
-    n = direction > 0 ? 1 : 1;
+    n = 1;
   } else {
     n = Math.max(1, n + direction);
   }
   takeField.value = String(n);
   saveState();
-  vibrate(6);
 }
 
+document.getElementById('sl-plus').addEventListener('click',      () => bumpSlateBtn(1));
+document.getElementById('sl-minus').addEventListener('click',     () => bumpSlateBtn(-1));
+document.getElementById('tk-plus').addEventListener('click',      () => bumpTakeBtn(1));
+document.getElementById('tk-minus').addEventListener('click',     () => bumpTakeBtn(-1));
+document.getElementById('sunny-btn').addEventListener('click',    () => { takeField.value = 'Sunny';    saveState(); });
+document.getElementById('overcast-btn').addEventListener('click', () => { takeField.value = 'Overcast'; saveState(); });
 
-const slPlus  = document.getElementById('sl-plus');
-const slMinus = document.getElementById('sl-minus');
-const tkPlus  = document.getElementById('tk-plus');
-const tkMinus = document.getElementById('tk-minus');
-const sunBtn  = document.getElementById('sunny-btn');
-const ovcBtn  = document.getElementById('overcast-btn');
-
-slPlus.addEventListener('click',  () => { flashBtn(slPlus);  bumpSlateBtn(1);  });
-slMinus.addEventListener('click', () => { flashBtn(slMinus); bumpSlateBtn(-1); });
-tkPlus.addEventListener('click',  () => { flashBtn(tkPlus);  bumpTakeBtn(1);   });
-tkMinus.addEventListener('click', () => { flashBtn(tkMinus); bumpTakeBtn(-1);  });
-
-sunBtn.addEventListener('click', () => {
-  flashBtn(sunBtn);
-  // Deactivate overcast
-  ovcBtn.classList.remove('active');
-  sunBtn.classList.toggle('active');
-  takeField.value = sunBtn.classList.contains('active') ? 'Sunny' : '1';
-  saveState(); vibrate(6);
-});
-ovcBtn.addEventListener('click', () => {
-  flashBtn(ovcBtn);
-  sunBtn.classList.remove('active');
-  ovcBtn.classList.toggle('active');
-  takeField.value = ovcBtn.classList.contains('active') ? 'Overcast' : '1';
-  saveState(); vibrate(6);
-});
-
-/* ---- Field validation / formatting ---- */
 slateField.addEventListener('input', () => {
   slateField.value = slateField.value.toUpperCase();
 });
@@ -771,19 +462,14 @@ slateField.addEventListener('blur', () => {
   }
   saveState();
 });
+
 takeField.addEventListener('blur', () => {
   saveState();
 });
-// Deactivate condition buttons when take is manually edited
-takeField.addEventListener('input', () => {
-  const v = takeField.value.trim().toLowerCase();
-  sunBtn.classList.toggle('active', v === 'sunny');
-  ovcBtn.classList.toggle('active', v === 'overcast');
-});
 
-/* =====================================================================
+/* ============================================================
    WAKE LOCK
-   ===================================================================== */
+   ============================================================ */
 let wakeLock = null;
 async function requestWakeLock() {
   try {
@@ -794,9 +480,9 @@ document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') requestWakeLock();
 });
 
-/* =====================================================================
+/* ============================================================
    CLEANUP
-   ===================================================================== */
+   ============================================================ */
 window.addEventListener('pagehide', () => {
   if (wakeLock) { try { wakeLock.release(); } catch(e){} }
 });
