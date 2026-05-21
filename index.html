@@ -675,30 +675,24 @@ function onOrientation(e) {
   renderLevel(smoothX, smoothY);
 }
 
-function renderLevel(tiltX, tiltY) {
-  const total = Math.sqrt(tiltX * tiltX + tiltY * tiltY);
-  const color = total < 0.5 ? 'var(--green)'
-              : total < 2   ? 'var(--yellow)'
-              :                'var(--red)';
-  levelDot.style.background = color;
-  levelDot.style.boxShadow  = `0 0 10px 3px ${total < 0.5 ? '#3ddba0' : total < 2 ? '#f5c842' : '#f05050'}`;
-  levelReadout.style.color  = color;
-  levelReadout.textContent  =
-    (tiltX >= 0 ? '+' : '') + tiltX.toFixed(1) + '°  ' +
-    (tiltY >= 0 ? '+' : '') + tiltY.toFixed(1) + '°';
-  // Bar: center = 50%, max shift ±40% at 5°
-  const shift = Math.min(Math.abs(tiltX) / 5, 1) * 40;
-  const barW  = 4 + Math.min(total / 5, 1) * 30; // 4–34%
-  levelBar.style.width      = barW + '%';
-  levelBar.style.marginLeft = (50 - barW / 2 + (tiltX / 5) * 30) + '%';
-  levelBar.style.background = total < 0.5 ? 'var(--green)' : total < 2 ? 'var(--yellow)' : 'var(--red)';
+function formatTilt(val) {
+  const sign = val >= 0 ? '+' : '-';
+  const abs = Math.abs(val).toFixed(1);
+  const dot = abs.indexOf('.');
+  const intPart = abs.slice(0, dot).padStart(2, ' ');
+  return sign + intPart + '.' + abs.slice(dot + 1) + '°';
 }
 
-/* =====================================================================
-   HAPTIC FEEDBACK
-   ===================================================================== */
-function vibrate(pattern) {
-  try { if (navigator.vibrate) navigator.vibrate(pattern); } catch(e) {}
+function renderTilt(tiltX, tiltY) {
+  const total = Math.sqrt(tiltX * tiltX + tiltY * tiltY);
+  const color = total < 0.5 ? '#2ade7a'
+              : total < 2   ? '#f5d76e'
+              :                '#e85a3a';
+
+  tiltElX.textContent = formatTilt(tiltX);
+  tiltElY.textContent = formatTilt(tiltY);
+  tiltElX.style.color = color;
+  tiltElY.style.color = color;
 }
 
 function flashBtn(btn) {
