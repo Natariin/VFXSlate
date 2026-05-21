@@ -404,14 +404,22 @@ function onOrientation(e) {
   renderTilt(smoothX, smoothY);
 }
 
+function formatTilt(val) {
+  const sign = val >= 0 ? '+' : '-';
+  const abs = Math.abs(val).toFixed(1);
+  const dot = abs.indexOf('.');
+  const intPart = abs.slice(0, dot).padStart(2, ' ');
+  return sign + intPart + '.' + abs.slice(dot + 1) + '°';
+}
+
 function renderTilt(tiltX, tiltY) {
   const total = Math.sqrt(tiltX * tiltX + tiltY * tiltY);
   const color = total < 0.5 ? '#2ade7a'
               : total < 2   ? '#f5d76e'
               :                '#e85a3a';
 
-  tiltElX.textContent = (tiltX >= 0 ? '+' : '') + tiltX.toFixed(1) + '°';
-  tiltElY.textContent = (tiltY >= 0 ? '+' : '') + tiltY.toFixed(1) + '°';
+  tiltElX.textContent = formatTilt(tiltX);
+  tiltElY.textContent = formatTilt(tiltY);
   tiltElX.style.color = color;
   tiltElY.style.color = color;
 }
